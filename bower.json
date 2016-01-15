@@ -1,6 +1,29 @@
 {
   "name": "ui-pdfjs",
-  "version": "0.0.0",
+  "homepage": "https://github.com/beanext/ui-pdfjs",
+  "version": "0.0.1",
+  "authors": [
+    "Michael Qian",
+    "Ethan Zhao"
+  ],
+  "main": [
+    "dist/viewer/pdf.js",
+    "dist/viewer/pdf.worker.js",
+    "dist/ui-pdfjs/ui-pdf.js"
+  ],
+  "ignore": [
+    "**/.*",
+    "lib*",
+    "src*",
+    "app*",
+    "node_modules",
+    "bower_components",
+    "test*",
+    "demo*",
+    "example*",
+    "GruntFile.js",
+    "package.json"
+  ],
   "dependencies": {
     "angular": "^1.4.0",
     "bootstrap-sass-official": "^3.2.0",

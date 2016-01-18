@@ -1,14 +1,14 @@
 {
   "name": "ui-pdfjs",
   "homepage": "https://github.com/beanext/ui-pdfjs",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "authors": [
     "Michael Qian",
     "Ethan Zhao"
   ],
   "main": [
     "dist/viewer/pdfjs/viewer.css",
-    "dist/ui-pdfjs/ui-pdf.js"
+    "dist/ui-pdf.js"
   ],
   "ignore": [
     "**/.*",

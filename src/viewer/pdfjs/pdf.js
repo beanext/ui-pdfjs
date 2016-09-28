@@ -20265,11 +20265,6 @@ var pdfjsWebLibs = {
 
             initialParams.hash = storedHash;
 
-            // Make all navigation keys work on document load,
-            // unless the viewer is embedded in a web page.
-            if (!self.isViewerEmbedded) {
-              self.pdfViewer.focus();
-            }
           }, function rejected(reason) {
             console.error(reason);
             self.setInitialView(null, {scale: scale});

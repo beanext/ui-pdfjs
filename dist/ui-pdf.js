@@ -47,6 +47,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
       var script = document.createElement('script');
       script.setAttribute('src', pdfjsSrc);
       var loaded = false;
+      var container = document.getElementsByTagName('head')[0];
       script.onload = function () {
         PDFJS.workerSrc = pdfjsSrc.replace(/\.js$/i, '.worker.js');
         if (!loaded) {
@@ -54,7 +55,6 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
         }
         loaded = true;
       };
-      var container = document.getElementsByTagName('head')[0];
       container.appendChild(localeResource);
       container.appendChild(script);
     } else {
@@ -70,32 +70,32 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
       scope: {
         onInit: '&',
         onPageLoad: '&',
-        scale: '=',
-        enableOpenFile: '=',
-        enableDownload: '=',
-        enablePrint: '=',
-        enableFullscreen: '=',
-        enableBookmark: '=',
-        enableFirstPage: '=',
-        enableLastPage: '=',
-        enableRotateL: '=',
-        enableRotateR: '=',
-        enableHandTool: '=',
-        enableDocProps: '=',
-        enableScale: '=',
-        enableZoomOut: '=',
-        enableZoomIn: '=',
-        numPagesVisible: '=',
-        enableNumPage: '=',
-        enablePageDown: '=',
-        enablePageUp: '=',
-        enableSidebar: '=',
-        enableSearch: '=',
-        width: '=',
-        height: '=',
-        onePage: '=',
-        pdfClass: '=',
-        notInSecondaryTool: '='
+        scale: '=?',
+        enableOpenFile: '=?',
+        enableDownload: '=?',
+        enablePrint: '=?',
+        enableFullscreen: '=?',
+        enableBookmark: '=?',
+        enableFirstPage: '=?',
+        enableLastPage: '=?',
+        enableRotateL: '=?',
+        enableRotateR: '=?',
+        enableHandTool: '=?',
+        enableDocProps: '=?',
+        enableScale: '=?',
+        enableZoomOut: '=?',
+        enableZoomIn: '=?',
+        numPagesVisible: '=?',
+        enableNumPage: '=?',
+        enablePageDown: '=?',
+        enablePageUp: '=?',
+        enableSidebar: '=?',
+        enableSearch: '=?',
+        width: '=?',
+        height: '=?',
+        onePage: '=?',
+        pdfClass: '=?',
+        notInSecondaryTool: '=?'
       },
       link: function ($scope, $element, $attrs) {
         $scope.pdfClass = $scope.pdfClass || 'pdfjs';

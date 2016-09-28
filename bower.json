@@ -7,7 +7,6 @@
     "Ethan Zhao"
   ],
   "main": [
-    "dist/viewer/pdfjs/viewer.css",
     "dist/ui-pdf.js"
   ],
   "ignore": [
@@ -24,23 +23,11 @@
     "package.json"
   ],
   "dependencies": {
-    "angular": "^1.4.0",
-    "bootstrap-sass-official": "^3.2.0",
-    "angular-animate": "^1.4.0",
-    "angular-touch": "^1.4.0"
+    "jquery": "^1.12.4",
+    "angular": "^1.5.8"
   },
   "devDependencies": {
-    "angular-mocks": "^1.4.0"
   },
   "appPath": "app",
-  "moduleName": "uiPdfjsApp",
-  "overrides": {
-    "bootstrap": {
-      "main": [
-        "less/bootstrap.less",
-        "dist/css/bootstrap.css",
-        "dist/js/bootstrap.js"
-      ]
-    }
-  }
+  "moduleName": "uiPdfjsApp"
 }

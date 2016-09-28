@@ -23,8 +23,8 @@
     "package.json"
   ],
   "dependencies": {
-    "jquery": "^1.12.4",
-    "angular": "^1.5.8"
+    "jquery": "^1.7.0",
+    "angular": "^1.4.0"
   },
   "devDependencies": {
   },

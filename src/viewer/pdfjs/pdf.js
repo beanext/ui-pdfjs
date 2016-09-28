@@ -112,12 +112,16 @@
       try {
         // some browsers (e.g. safari) cannot use defineProperty() on DOM objects
         // and thus the native version is not sufficient
-        Object.defineProperty(new Image(), 'id', { value: 'test' });
+        Object.defineProperty(new Image(), 'id', {value: 'test'});
         // ... another test for android gb browser for non-DOM objects
-        var Test = function Test() {};
-        Test.prototype = { get id() { } };
+        var Test = function Test() {
+        };
+        Test.prototype = {
+          get id() {
+          }
+        };
         Object.defineProperty(new Test(), 'id',
-          { value: '', configurable: true, enumerable: true, writable: false });
+          {value: '', configurable: true, enumerable: true, writable: false});
       } catch (e) {
         definePropertyPossible = false;
       }
@@ -156,7 +160,8 @@
       // IE10 might have response, but not overrideMimeType
       // Support: IE10
       Object.defineProperty(xhrPrototype, 'overrideMimeType', {
-        value: function xmlHttpRequestOverrideMimeType(mimeType) {}
+        value: function xmlHttpRequestOverrideMimeType(mimeType) {
+        }
       });
     }
     if ('responseType' in xhr) {
@@ -298,7 +303,7 @@
     }
 
     Object.defineProperty(HTMLElement.prototype, 'dataset', {
-      get: function() {
+      get: function () {
         if (this._dataset) {
           return this._dataset;
         }
@@ -310,7 +315,7 @@
             continue;
           }
           var key = attribute.name.substring(5).replace(/\-([a-z])/g,
-            function(all, ch) {
+            function (all, ch) {
               return ch.toUpperCase();
             });
           dataset[key] = attribute.value;
@@ -353,22 +358,22 @@
     }
 
     var classListPrototype = {
-      add: function(name) {
+      add: function (name) {
         changeList(this.element, name, true, false);
       },
-      contains: function(name) {
+      contains: function (name) {
         return changeList(this.element, name, false, false);
       },
-      remove: function(name) {
+      remove: function (name) {
         changeList(this.element, name, false, true);
       },
-      toggle: function(name) {
+      toggle: function (name) {
         changeList(this.element, name, true, true);
       }
     };
 
     Object.defineProperty(HTMLElement.prototype, 'classList', {
-      get: function() {
+      get: function () {
         if (this._classList) {
           return this._classList;
         }
@@ -398,20 +403,29 @@
   (function checkConsoleCompatibility() {
     if (!('console' in window)) {
       window.console = {
-        log: function() {},
-        error: function() {},
-        warn: function() {}
+        log: function () {
+        },
+        error: function () {
+        },
+        warn: function () {
+        }
       };
     } else if (!('bind' in console.log)) {
       // native functions in IE9 might not have bind
-      console.log = (function(fn) {
-        return function(msg) { return fn(msg); };
+      console.log = (function (fn) {
+        return function (msg) {
+          return fn(msg);
+        };
       })(console.log);
-      console.error = (function(fn) {
-        return function(msg) { return fn(msg); };
+      console.error = (function (fn) {
+        return function (msg) {
+          return fn(msg);
+        };
       })(console.error);
-      console.warn = (function(fn) {
-        return function(msg) { return fn(msg); };
+      console.warn = (function (fn) {
+        return function (msg) {
+          return fn(msg);
+        };
       })(console.warn);
     }
   })();
@@ -426,9 +440,11 @@
         event.stopPropagation();
       }
     }
+
     function isDisabled(node) {
       return node.disabled || (node.parentNode && isDisabled(node.parentNode));
     }
+
     if (navigator.userAgent.indexOf('Opera') !== -1) {
       // use browser detection since we cannot feature-check this bug
       document.addEventListener('click', ignoreIfTargetDisabled, true);
@@ -493,7 +509,7 @@
     // IE < 11 will use window.CanvasPixelArray which lacks set function.
     if (window.CanvasPixelArray) {
       if (typeof window.CanvasPixelArray.prototype.set !== 'function') {
-        window.CanvasPixelArray.prototype.set = function(arr) {
+        window.CanvasPixelArray.prototype.set = function (arr) {
           for (var i = 0, ii = this.length; i < ii; i++) {
             this[i] = arr[i];
           }
@@ -513,8 +529,7 @@
         // thus pass the Chrome check above and not reach this block.
         polyfill = /Android\s[0-4][^\d]/g.test(navigator.userAgent);
       } else if (navigator.userAgent.indexOf('Safari') >= 0) {
-        versionMatch = navigator.userAgent.
-        match(/Version\/([0-9]+)\.([0-9]+)\.([0-9]+) Safari\//);
+        versionMatch = navigator.userAgent.match(/Version\/([0-9]+)\.([0-9]+)\.([0-9]+) Safari\//);
         // Safari < 6 lacks the set function.
         polyfill = versionMatch && parseInt(versionMatch[1]) < 6;
       }
@@ -522,9 +537,9 @@
       if (polyfill) {
         var contextPrototype = window.CanvasRenderingContext2D.prototype;
         var createImageData = contextPrototype.createImageData;
-        contextPrototype.createImageData = function(w, h) {
+        contextPrototype.createImageData = function (w, h) {
           var imageData = createImageData.call(this, w, h);
-          imageData.data.set = function(arr) {
+          imageData.data.set = function (arr) {
             for (var i = 0, ii = this.length; i < ii; i++) {
               this[i] = arr[i];
             }
@@ -627,7 +642,7 @@
 /*jshint browser: true, devel: true, es5: true, globalstrict: true */
 'use strict';
 
-document.webL10n = (function(window, document, undefined) {
+document.webL10n = (function (window, document, undefined) {
   var gL10nData = {};
   var gTextData = '';
   var gTextProp = 'textContent';
@@ -686,7 +701,7 @@ document.webL10n = (function(window, document, undefined) {
         console.warn('could not parse arguments for #' + l10nId);
       }
     }
-    return { id: l10nId, args: args };
+    return {id: l10nId, args: args};
   }
 
   function fireL10nReadyEvent(lang) {
@@ -697,7 +712,8 @@ document.webL10n = (function(window, document, undefined) {
   }
 
   function xhrLoadText(url, onSuccess, onFailure) {
-    onSuccess = onSuccess || function _onSuccess(data) {};
+    onSuccess = onSuccess || function _onSuccess(data) {
+      };
     onFailure = onFailure || function _onFailure() {
         console.warn(url + ' not found.');
       };
@@ -707,7 +723,7 @@ document.webL10n = (function(window, document, undefined) {
     if (xhr.overrideMimeType) {
       xhr.overrideMimeType('text/plain; charset=utf-8');
     }
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = function () {
       if (xhr.readyState == 4) {
         if (xhr.status == 200 || xhr.status === 0) {
           onSuccess(xhr.responseText);
@@ -834,28 +850,29 @@ document.webL10n = (function(window, document, undefined) {
             }
           }
         }
+
         nextEntry();
       }
 
       // import another *.properties file
       function loadImport(url, callback) {
-        xhrLoadText(url, function(content) {
+        xhrLoadText(url, function (content) {
           parseRawLines(content, false, callback); // don't allow recursive imports
         }, null);
       }
 
       // fill the dictionary
-      parseRawLines(text, true, function() {
+      parseRawLines(text, true, function () {
         parsedPropertiesCallback(dictionary);
       });
     }
 
     // load and parse l10n data (warning: global variables are used here)
-    xhrLoadText(href, function(response) {
+    xhrLoadText(href, function (response) {
       gTextData += response; // mostly for debug
 
       // parse *.properties text data into an l10n dictionary
-      parseProperties(response, function(data) {
+      parseProperties(response, function (data) {
 
         // find attribute descriptions, if any
         for (var key in data) {
@@ -889,7 +906,8 @@ document.webL10n = (function(window, document, undefined) {
       lang = lang.toLowerCase();
     }
 
-    callback = callback || function _callback() {};
+    callback = callback || function _callback() {
+      };
 
     clear();
     gLanguage = lang;
@@ -929,7 +947,7 @@ document.webL10n = (function(window, document, undefined) {
     // start the callback when all resources are loaded
     var onResourceLoaded = null;
     var gResourceCount = 0;
-    onResourceLoaded = function() {
+    onResourceLoaded = function () {
       gResourceCount++;
       if (gResourceCount >= langCount) {
         callback();
@@ -943,8 +961,8 @@ document.webL10n = (function(window, document, undefined) {
       var href = link.href;
       // Note: If |gAsyncResourceLoading| is false, then the following callbacks
       // are synchronously called.
-      this.load = function(lang, callback) {
-        parseResource(href, lang, callback, function() {
+      this.load = function (lang, callback) {
+        parseResource(href, lang, callback, function () {
           console.warn(href + ' not found.');
           // lang not found, used default resource instead
           console.warn('"' + lang + '" resource not found');
@@ -1165,6 +1183,7 @@ document.webL10n = (function(window, document, undefined) {
     function isIn(n, list) {
       return list.indexOf(n) !== -1;
     }
+
     function isBetween(n, start, end) {
       return start <= n && n <= end;
     }
@@ -1172,10 +1191,10 @@ document.webL10n = (function(window, document, undefined) {
     // list of all plural rules methods:
     // map an integer to the plural form name to use
     var pluralRules = {
-      '0': function(n) {
+      '0': function (n) {
         return 'other';
       },
-      '1': function(n) {
+      '1': function (n) {
         if ((isBetween((n % 100), 3, 10)))
           return 'few';
         if (n === 0)
@@ -1188,7 +1207,7 @@ document.webL10n = (function(window, document, undefined) {
           return 'one';
         return 'other';
       },
-      '2': function(n) {
+      '2': function (n) {
         if (n !== 0 && (n % 10) === 0)
           return 'many';
         if (n == 2)
@@ -1197,36 +1216,36 @@ document.webL10n = (function(window, document, undefined) {
           return 'one';
         return 'other';
       },
-      '3': function(n) {
+      '3': function (n) {
         if (n == 1)
           return 'one';
         return 'other';
       },
-      '4': function(n) {
+      '4': function (n) {
         if ((isBetween(n, 0, 1)))
           return 'one';
         return 'other';
       },
-      '5': function(n) {
+      '5': function (n) {
         if ((isBetween(n, 0, 2)) && n != 2)
           return 'one';
         return 'other';
       },
-      '6': function(n) {
+      '6': function (n) {
         if (n === 0)
           return 'zero';
         if ((n % 10) == 1 && (n % 100) != 11)
           return 'one';
         return 'other';
       },
-      '7': function(n) {
+      '7': function (n) {
         if (n == 2)
           return 'two';
         if (n == 1)
           return 'one';
         return 'other';
       },
-      '8': function(n) {
+      '8': function (n) {
         if ((isBetween(n, 3, 6)))
           return 'few';
         if ((isBetween(n, 7, 10)))
@@ -1237,21 +1256,21 @@ document.webL10n = (function(window, document, undefined) {
           return 'one';
         return 'other';
       },
-      '9': function(n) {
+      '9': function (n) {
         if (n === 0 || n != 1 && (isBetween((n % 100), 1, 19)))
           return 'few';
         if (n == 1)
           return 'one';
         return 'other';
       },
-      '10': function(n) {
+      '10': function (n) {
         if ((isBetween((n % 10), 2, 9)) && !(isBetween((n % 100), 11, 19)))
           return 'few';
         if ((n % 10) == 1 && !(isBetween((n % 100), 11, 19)))
           return 'one';
         return 'other';
       },
-      '11': function(n) {
+      '11': function (n) {
         if ((isBetween((n % 10), 2, 4)) && !(isBetween((n % 100), 12, 14)))
           return 'few';
         if ((n % 10) === 0 ||
@@ -1262,14 +1281,14 @@ document.webL10n = (function(window, document, undefined) {
           return 'one';
         return 'other';
       },
-      '12': function(n) {
+      '12': function (n) {
         if ((isBetween(n, 2, 4)))
           return 'few';
         if (n == 1)
           return 'one';
         return 'other';
       },
-      '13': function(n) {
+      '13': function (n) {
         if ((isBetween((n % 10), 2, 4)) && !(isBetween((n % 100), 12, 14)))
           return 'few';
         if (n != 1 && (isBetween((n % 10), 0, 1)) ||
@@ -1280,7 +1299,7 @@ document.webL10n = (function(window, document, undefined) {
           return 'one';
         return 'other';
       },
-      '14': function(n) {
+      '14': function (n) {
         if ((isBetween((n % 100), 3, 4)))
           return 'few';
         if ((n % 100) == 2)
@@ -1289,7 +1308,7 @@ document.webL10n = (function(window, document, undefined) {
           return 'one';
         return 'other';
       },
-      '15': function(n) {
+      '15': function (n) {
         if (n === 0 || (isBetween((n % 100), 2, 10)))
           return 'few';
         if ((isBetween((n % 100), 11, 19)))
@@ -1298,12 +1317,12 @@ document.webL10n = (function(window, document, undefined) {
           return 'one';
         return 'other';
       },
-      '16': function(n) {
+      '16': function (n) {
         if ((n % 10) == 1 && n != 11)
           return 'one';
         return 'other';
       },
-      '17': function(n) {
+      '17': function (n) {
         if (n == 3)
           return 'few';
         if (n === 0)
@@ -1316,21 +1335,21 @@ document.webL10n = (function(window, document, undefined) {
           return 'one';
         return 'other';
       },
-      '18': function(n) {
+      '18': function (n) {
         if (n === 0)
           return 'zero';
         if ((isBetween(n, 0, 2)) && n !== 0 && n != 2)
           return 'one';
         return 'other';
       },
-      '19': function(n) {
+      '19': function (n) {
         if ((isBetween(n, 2, 10)))
           return 'few';
         if ((isBetween(n, 0, 1)))
           return 'one';
         return 'other';
       },
-      '20': function(n) {
+      '20': function (n) {
         if ((isBetween((n % 10), 3, 4) || ((n % 10) == 9)) && !(
             isBetween((n % 100), 10, 19) ||
             isBetween((n % 100), 70, 79) ||
@@ -1345,24 +1364,24 @@ document.webL10n = (function(window, document, undefined) {
           return 'one';
         return 'other';
       },
-      '21': function(n) {
+      '21': function (n) {
         if (n === 0)
           return 'zero';
         if (n == 1)
           return 'one';
         return 'other';
       },
-      '22': function(n) {
+      '22': function (n) {
         if ((isBetween(n, 0, 1)) || (isBetween(n, 11, 99)))
           return 'one';
         return 'other';
       },
-      '23': function(n) {
+      '23': function (n) {
         if ((isBetween((n % 10), 1, 2)) || (n % 20) === 0)
           return 'one';
         return 'other';
       },
-      '24': function(n) {
+      '24': function (n) {
         if ((isBetween(n, 3, 10) || isBetween(n, 13, 19)))
           return 'few';
         if (isIn(n, [2, 12]))
@@ -1377,13 +1396,15 @@ document.webL10n = (function(window, document, undefined) {
     var index = locales2rules[lang.replace(/-.*$/, '')];
     if (!(index in pluralRules)) {
       console.warn('plural form unknown for [' + lang + ']');
-      return function() { return 'other'; };
+      return function () {
+        return 'other';
+      };
     }
     return pluralRules[index];
   }
 
   // pre-defined 'plural' macro
-  gMacros.plural = function(str, param, key, prop) {
+  gMacros.plural = function (str, param, key, prop) {
     var n = parseFloat(param);
     if (isNaN(n))
       return str;
@@ -1474,7 +1495,7 @@ document.webL10n = (function(window, document, undefined) {
   // replace {{arguments}} with their values
   function substArguments(str, args, key) {
     var reArgs = /\{\{\s*(.+?)\s*\}\}/g;
-    return str.replace(reArgs, function(matched_text, arg) {
+    return str.replace(reArgs, function (matched_text, arg) {
       if (args && arg in args) {
         return args[arg];
       }
@@ -1565,7 +1586,7 @@ document.webL10n = (function(window, document, undefined) {
 
   return {
     // get a localized string
-    get: function(key, args, fallbackString) {
+    get: function (key, args, fallbackString) {
       var index = key.lastIndexOf('.');
       var prop = gTextProp;
       if (index > 0) { // An attribute has been specified
@@ -1585,13 +1606,19 @@ document.webL10n = (function(window, document, undefined) {
     },
 
     // debug
-    getData: function() { return gL10nData; },
-    getText: function() { return gTextData; },
+    getData: function () {
+      return gL10nData;
+    },
+    getText: function () {
+      return gTextData;
+    },
 
     // get|set the document language
-    getLanguage: function() { return gLanguage; },
-    setLanguage: function(lang, callback) {
-      loadLocale(lang, function() {
+    getLanguage: function () {
+      return gLanguage;
+    },
+    setLanguage: function (lang, callback) {
+      loadLocale(lang, function () {
         if (callback)
           callback();
         translateFragment();
@@ -1599,7 +1626,7 @@ document.webL10n = (function(window, document, undefined) {
     },
 
     // get the direction (ltr|rtl) of the current language
-    getDirection: function() {
+    getDirection: function () {
       // http://www.w3.org/International/questions/qa-scripts
       // Arabic, Hebrew, Farsi, Pashto, Urdu
       var rtlList = ['ar', 'he', 'fa', 'ps', 'ur'];
@@ -1611,12 +1638,14 @@ document.webL10n = (function(window, document, undefined) {
     translate: translateFragment,
 
     // this can be used to prevent race conditions
-    getReadyState: function() { return gReadyState; },
-    ready: function(callback) {
+    getReadyState: function () {
+      return gReadyState;
+    },
+    ready: function (callback) {
       if (!callback) {
         return;
       } else if (gReadyState == 'complete' || gReadyState == 'interactive') {
-        window.setTimeout(function() {
+        window.setTimeout(function () {
           callback();
         });
       } else if (document.addEventListener) {
@@ -1627,7 +1656,7 @@ document.webL10n = (function(window, document, undefined) {
       }
     }
   };
-}) (window, document);
+})(window, document);
 
 
 /* Copyright 2012 Mozilla Foundation
@@ -1649,13 +1678,7 @@ document.webL10n = (function(window, document, undefined) {
 
 (function (root, factory) {
   'use strict';
-  if (typeof define === 'function' && define.amd) {
-    define('pdfjs-dist/build/pdf', ['exports'], factory);
-  } else if (typeof exports !== 'undefined') {
-    factory(exports);
-  } else {
-    factory((root.pdfjsDistBuildPdf = {}));
-  }
+  factory((root.pdfjsDistBuildPdf = {}));
 }(this, function (exports) {
   // Use strict in our context only - users might not want it
   'use strict';
@@ -1670,7 +1693,6 @@ document.webL10n = (function(window, document, undefined) {
   var pdfjsLibs = {};
 
   (function pdfjsWrapper() {
-
 
 
     (function (root, factory) {
@@ -1728,7 +1750,8 @@ document.webL10n = (function(window, document, undefined) {
         var prefixes = ['ms', 'Moz', 'Webkit', 'O'];
         var _cache = {};
 
-        function CustomStyle() {}
+        function CustomStyle() {
+        }
 
         CustomStyle.getProp = function get(propName, element) {
           // check cache only when no element is given
@@ -2071,6 +2094,7 @@ document.webL10n = (function(window, document, undefined) {
             return false;
         }
       }
+
       PDFJS.isValidUrl = isValidUrl;
 
       /**
@@ -2091,15 +2115,19 @@ document.webL10n = (function(window, document, undefined) {
           link.rel = PDFJS.externalLinkRel;
         }
       }
+
       PDFJS.addLinkAttributes = addLinkAttributes;
 
       function shadow(obj, prop, value) {
-        Object.defineProperty(obj, prop, { value: value,
+        Object.defineProperty(obj, prop, {
+          value: value,
           enumerable: true,
           configurable: true,
-          writable: false });
+          writable: false
+        });
         return value;
       }
+
       PDFJS.shadow = shadow;
 
       var LinkTarget = PDFJS.LinkTarget = {
@@ -2141,6 +2169,7 @@ document.webL10n = (function(window, document, undefined) {
         PDFJS.externalLinkTarget = LinkTarget.NONE;
         return false;
       }
+
       PDFJS.isExternalLinkTargetSet = isExternalLinkTargetSet;
 
       var PasswordResponses = PDFJS.PasswordResponses = {
@@ -2264,6 +2293,7 @@ document.webL10n = (function(window, document, undefined) {
         }
         return str.replace(NullCharactersRegExp, '');
       }
+
       PDFJS.removeNullCharacters = removeNullCharacters;
 
       function bytesToString(bytes) {
@@ -2360,9 +2390,11 @@ document.webL10n = (function(window, document, undefined) {
           this.length = length === undefined ? (this.byteLength >> 2) : length;
           ensureUint32ArrayViewProps(this.length);
         }
+
         Uint32ArrayView.prototype = Object.create(null);
 
         var uint32ArrayViewSetters = 0;
+
         function createUint32ArrayProp(index) {
           return {
             get: function () {
@@ -2397,7 +2429,8 @@ document.webL10n = (function(window, document, undefined) {
       var IDENTITY_MATRIX = [1, 0, 0, 1, 0, 0];
 
       var Util = PDFJS.Util = (function UtilClosure() {
-        function Util() {}
+        function Util() {
+        }
 
         var rgbBuf = ['rgb(', 0, ',', 0, ',', 0, ')'];
 
@@ -2631,7 +2664,7 @@ document.webL10n = (function(window, document, undefined) {
           var loaded = false;
           script.setAttribute('src', src);
           if (callback) {
-            script.onload = function() {
+            script.onload = function () {
               if (!loaded) {
                 callback();
               }
@@ -2676,22 +2709,35 @@ document.webL10n = (function(window, document, undefined) {
           rotation = rotation < 0 ? rotation + 360 : rotation;
           switch (rotation) {
             case 180:
-              rotateA = -1; rotateB = 0; rotateC = 0; rotateD = 1;
+              rotateA = -1;
+              rotateB = 0;
+              rotateC = 0;
+              rotateD = 1;
               break;
             case 90:
-              rotateA = 0; rotateB = 1; rotateC = 1; rotateD = 0;
+              rotateA = 0;
+              rotateB = 1;
+              rotateC = 1;
+              rotateD = 0;
               break;
             case 270:
-              rotateA = 0; rotateB = -1; rotateC = -1; rotateD = 0;
+              rotateA = 0;
+              rotateB = -1;
+              rotateC = -1;
+              rotateD = 0;
               break;
             //case 0:
             default:
-              rotateA = 1; rotateB = 0; rotateC = 0; rotateD = -1;
+              rotateA = 1;
+              rotateB = 0;
+              rotateC = 0;
+              rotateD = -1;
               break;
           }
 
           if (dontFlip) {
-            rotateC = -rotateC; rotateD = -rotateD;
+            rotateC = -rotateC;
+            rotateD = -rotateD;
           }
 
           var offsetCanvasX, offsetCanvasY;
@@ -2723,6 +2769,7 @@ document.webL10n = (function(window, document, undefined) {
           this.height = height;
           this.fontScale = scale;
         }
+
         PageViewport.prototype = /** @lends PDFJS.PageViewport.prototype */ {
           /**
            * Clones viewport with additional properties.
@@ -2758,12 +2805,11 @@ document.webL10n = (function(window, document, undefined) {
            * in the viewport coordinate space.
            * @see {@link convertToViewportPoint}
            */
-          convertToViewportRectangle:
-            function PageViewport_convertToViewportRectangle(rect) {
-              var tl = Util.applyTransform([rect[0], rect[1]], this.transform);
-              var br = Util.applyTransform([rect[2], rect[3]], this.transform);
-              return [tl[0], tl[1], br[0], br[1]];
-            },
+          convertToViewportRectangle: function PageViewport_convertToViewportRectangle(rect) {
+            var tl = Util.applyTransform([rect[0], rect[1]], this.transform);
+            var br = Util.applyTransform([rect[2], rect[3]], this.transform);
+            return [tl[0], tl[1], br[0], br[1]];
+          },
           /**
            * Converts viewport coordinates to the PDF location. For examples, useful
            * for converting canvas pixel location into PDF one.
@@ -2913,7 +2959,9 @@ document.webL10n = (function(window, document, undefined) {
           }
           if (typeof globalScope.Promise.resolve !== 'function') {
             globalScope.Promise.resolve = function (value) {
-              return new globalScope.Promise(function (resolve) { resolve(value); });
+              return new globalScope.Promise(function (resolve) {
+                resolve(value);
+              });
             };
           }
           if (typeof globalScope.Promise.reject !== 'function') {
@@ -3056,6 +3104,7 @@ document.webL10n = (function(window, document, undefined) {
             this._reject(e);
           }
         }
+
         /**
          * Builds a promise that is resolved when all the passed in promises are
          * resolved.
@@ -3081,10 +3130,11 @@ document.webL10n = (function(window, document, undefined) {
             results = [];
             rejectAll(reason);
           }
+
           for (var i = 0, ii = promises.length; i < ii; ++i) {
             var promise = promises[i];
-            var resolve = (function(i) {
-              return function(value) {
+            var resolve = (function (i) {
+              return function (value) {
                 if (deferred._status === STATUS_REJECTED) {
                   return;
                 }
@@ -3118,7 +3168,9 @@ document.webL10n = (function(window, document, undefined) {
          * @returns {Promise}
          */
         Promise.resolve = function Promise_resolve(value) {
-          return new Promise(function (resolve) { resolve(value); });
+          return new Promise(function (resolve) {
+            resolve(value);
+          });
         };
 
         /**
@@ -3127,7 +3179,9 @@ document.webL10n = (function(window, document, undefined) {
          * @returns {Promise}
          */
         Promise.reject = function Promise_reject(reason) {
-          return new Promise(function (resolve, reject) { reject(reason); });
+          return new Promise(function (resolve, reject) {
+            reject(reason);
+          });
         };
 
         Promise.prototype = {
@@ -3198,11 +3252,13 @@ document.webL10n = (function(window, document, undefined) {
           }
           return str;
         }
+
         function StatTimer() {
           this.started = {};
           this.times = [];
           this.enabled = true;
         }
+
         StatTimer.prototype = {
           time: function StatTimer_time(name) {
             if (!this.enabled) {
@@ -3253,7 +3309,7 @@ document.webL10n = (function(window, document, undefined) {
 
       PDFJS.createBlob = function createBlob(data, contentType) {
         if (typeof Blob !== 'undefined') {
-          return new Blob([data], { type: contentType });
+          return new Blob([data], {type: contentType});
         }
         // Blob builder is deprecated in FF14 and removed in FF18.
         var bb = new MozBlobBuilder();
@@ -3383,25 +3439,24 @@ document.webL10n = (function(window, document, undefined) {
          * @param {Array} [transfers] Optional list of transfers/ArrayBuffers.
          * @returns {Promise} Promise to be resolved with response data.
          */
-        sendWithPromise:
-          function messageHandlerSendWithPromise(actionName, data, transfers) {
-            var callbackId = this.callbackIndex++;
-            var message = {
-              sourceName: this.sourceName,
-              targetName: this.targetName,
-              action: actionName,
-              data: data,
-              callbackId: callbackId
-            };
-            var capability = createPromiseCapability();
-            this.callbacksCapabilities[callbackId] = capability;
-            try {
-              this.postMessage(message, transfers);
-            } catch (e) {
-              capability.reject(e);
-            }
-            return capability.promise;
-          },
+        sendWithPromise: function messageHandlerSendWithPromise(actionName, data, transfers) {
+          var callbackId = this.callbackIndex++;
+          var message = {
+            sourceName: this.sourceName,
+            targetName: this.targetName,
+            action: actionName,
+            data: data,
+            callbackId: callbackId
+          };
+          var capability = createPromiseCapability();
+          this.callbacksCapabilities[callbackId] = capability;
+          try {
+            this.postMessage(message, transfers);
+          } catch (e) {
+            capability.reject(e);
+          }
+          return capability.promise;
+        },
         /**
          * Sends raw message to the comObj.
          * @private
@@ -3449,7 +3504,8 @@ document.webL10n = (function(window, document, undefined) {
             u.pathname = 'c%20d';
             hasWorkingUrl = u.href === 'http://a/c%20d';
           }
-        } catch(e) { }
+        } catch (e) {
+        }
 
         if (hasWorkingUrl)
           return;
@@ -3606,7 +3662,7 @@ document.webL10n = (function(window, document, undefined) {
                 break;
 
               case 'relative or authority':
-                if ('/' == c && '/' == input[cursor+1]) {
+                if ('/' == c && '/' == input[cursor + 1]) {
                   state = 'authority ignore slashes';
                 } else {
                   err('Expected /, got: ' + c);
@@ -3649,8 +3705,8 @@ document.webL10n = (function(window, document, undefined) {
                   this._password = base._password;
                   state = 'fragment';
                 } else {
-                  var nextC = input[cursor+1]
-                  var nextNextC = input[cursor+2]
+                  var nextC = input[cursor + 1]
+                  var nextNextC = input[cursor + 2]
                   if (
                     'file' != this._scheme || !ALPHA.test(c) ||
                     (nextC != ':' && nextC != '|') ||
@@ -3914,7 +3970,7 @@ document.webL10n = (function(window, document, undefined) {
         }
 
         jURL.prototype = {
-          toString: function() {
+          toString: function () {
             return this.href;
           },
           get href() {
@@ -4038,12 +4094,12 @@ document.webL10n = (function(window, document, undefined) {
         // Copy over the static methods
         var OriginalURL = scope.URL;
         if (OriginalURL) {
-          jURL.createObjectURL = function(blob) {
+          jURL.createObjectURL = function (blob) {
             // IE extension allows a second optional options argument.
             // http://msdn.microsoft.com/en-us/library/ie/hh772302(v=vs.85).aspx
             return OriginalURL.createObjectURL.apply(OriginalURL, arguments);
           };
-          jURL.revokeObjectURL = function(url) {
+          jURL.revokeObjectURL = function (url) {
             OriginalURL.revokeObjectURL(url);
           };
         }
@@ -4137,7 +4193,9 @@ document.webL10n = (function(window, document, undefined) {
        * @class
        * @alias AnnotationElementFactory
        */
-      function AnnotationElementFactory() {}
+      function AnnotationElementFactory() {
+      }
+
       AnnotationElementFactory.prototype =
         /** @lends AnnotationElementFactory.prototype */ {
         /**
@@ -4320,7 +4378,7 @@ document.webL10n = (function(window, document, undefined) {
             this.container.className = 'linkAnnotation';
 
             var link = document.createElement('a');
-            addLinkAttributes(link, { url: this.data.url });
+            addLinkAttributes(link, {url: this.data.url});
 
             if (!this.data.url) {
               if (this.data.action) {
@@ -4346,7 +4404,7 @@ document.webL10n = (function(window, document, undefined) {
             var self = this;
 
             link.href = this.linkService.getDestinationHash(destination);
-            link.onclick = function() {
+            link.onclick = function () {
               if (destination) {
                 self.linkService.navigateTo(destination);
               }
@@ -4365,17 +4423,16 @@ document.webL10n = (function(window, document, undefined) {
            * @param {Object} action
            * @memberof LinkAnnotationElement
            */
-          _bindNamedAction:
-            function LinkAnnotationElement_bindNamedAction(link, action) {
-              var self = this;
+          _bindNamedAction: function LinkAnnotationElement_bindNamedAction(link, action) {
+            var self = this;
 
-              link.href = this.linkService.getAnchorUrl('');
-              link.onclick = function() {
-                self.linkService.executeNamedAction(action);
-                return false;
-              };
-              link.className = 'internalLink';
-            }
+            link.href = this.linkService.getAnchorUrl('');
+            link.onclick = function () {
+              self.linkService.executeNamedAction(action);
+              return false;
+            };
+            link.className = 'internalLink';
+          }
         });
 
         return LinkAnnotationElement;
@@ -4476,27 +4533,26 @@ document.webL10n = (function(window, document, undefined) {
            * @param {Object} font
            * @memberof WidgetAnnotationElement
            */
-          _setTextStyle:
-            function WidgetAnnotationElement_setTextStyle(element, font) {
-              // TODO: This duplicates some of the logic in CanvasGraphics.setFont().
-              var style = element.style;
-              style.fontSize = this.data.fontSize + 'px';
-              style.direction = (this.data.fontDirection < 0 ? 'rtl': 'ltr');
+          _setTextStyle: function WidgetAnnotationElement_setTextStyle(element, font) {
+            // TODO: This duplicates some of the logic in CanvasGraphics.setFont().
+            var style = element.style;
+            style.fontSize = this.data.fontSize + 'px';
+            style.direction = (this.data.fontDirection < 0 ? 'rtl' : 'ltr');
 
-              if (!font) {
-                return;
-              }
-
-              style.fontWeight = (font.black ?
-                (font.bold ? '900' : 'bold') :
-                (font.bold ? 'bold' : 'normal'));
-              style.fontStyle = (font.italic ? 'italic' : 'normal');
-
-              // Use a reasonable default font if the font doesn't specify a fallback.
-              var fontFamily = font.loadedName ? '"' + font.loadedName + '", ' : '';
-              var fallbackName = font.fallbackName || 'Helvetica, sans-serif';
-              style.fontFamily = fontFamily + fallbackName;
+            if (!font) {
+              return;
             }
+
+            style.fontWeight = (font.black ?
+              (font.bold ? '900' : 'bold') :
+              (font.bold ? 'bold' : 'normal'));
+            style.fontStyle = (font.italic ? 'italic' : 'normal');
+
+            // Use a reasonable default font if the font doesn't specify a fallback.
+            var fontFamily = font.loadedName ? '"' + font.loadedName + '", ' : '';
+            var fallbackName = font.fallbackName || 'Helvetica, sans-serif';
+            style.fontFamily = fontFamily + fallbackName;
+          }
         });
 
         return WidgetAnnotationElement;
@@ -4695,55 +4751,53 @@ document.webL10n = (function(window, document, undefined) {
        * @class
        * @alias HighlightAnnotationElement
        */
-      var HighlightAnnotationElement = (
-        function HighlightAnnotationElementClosure() {
-          function HighlightAnnotationElement(parameters) {
-            AnnotationElement.call(this, parameters);
+      var HighlightAnnotationElement = (function HighlightAnnotationElementClosure() {
+        function HighlightAnnotationElement(parameters) {
+          AnnotationElement.call(this, parameters);
+        }
+
+        Util.inherit(HighlightAnnotationElement, AnnotationElement, {
+          /**
+           * Render the highlight annotation's HTML element in the empty container.
+           *
+           * @public
+           * @memberof HighlightAnnotationElement
+           * @returns {HTMLSectionElement}
+           */
+          render: function HighlightAnnotationElement_render() {
+            this.container.className = 'highlightAnnotation';
+            return this.container;
           }
+        });
 
-          Util.inherit(HighlightAnnotationElement, AnnotationElement, {
-            /**
-             * Render the highlight annotation's HTML element in the empty container.
-             *
-             * @public
-             * @memberof HighlightAnnotationElement
-             * @returns {HTMLSectionElement}
-             */
-            render: function HighlightAnnotationElement_render() {
-              this.container.className = 'highlightAnnotation';
-              return this.container;
-            }
-          });
-
-          return HighlightAnnotationElement;
-        })();
+        return HighlightAnnotationElement;
+      })();
 
       /**
        * @class
        * @alias UnderlineAnnotationElement
        */
-      var UnderlineAnnotationElement = (
-        function UnderlineAnnotationElementClosure() {
-          function UnderlineAnnotationElement(parameters) {
-            AnnotationElement.call(this, parameters);
+      var UnderlineAnnotationElement = (function UnderlineAnnotationElementClosure() {
+        function UnderlineAnnotationElement(parameters) {
+          AnnotationElement.call(this, parameters);
+        }
+
+        Util.inherit(UnderlineAnnotationElement, AnnotationElement, {
+          /**
+           * Render the underline annotation's HTML element in the empty container.
+           *
+           * @public
+           * @memberof UnderlineAnnotationElement
+           * @returns {HTMLSectionElement}
+           */
+          render: function UnderlineAnnotationElement_render() {
+            this.container.className = 'underlineAnnotation';
+            return this.container;
           }
+        });
 
-          Util.inherit(UnderlineAnnotationElement, AnnotationElement, {
-            /**
-             * Render the underline annotation's HTML element in the empty container.
-             *
-             * @public
-             * @memberof UnderlineAnnotationElement
-             * @returns {HTMLSectionElement}
-             */
-            render: function UnderlineAnnotationElement_render() {
-              this.container.className = 'underlineAnnotation';
-              return this.container;
-            }
-          });
-
-          return UnderlineAnnotationElement;
-        })();
+        return UnderlineAnnotationElement;
+      })();
 
       /**
        * @class
@@ -4775,28 +4829,27 @@ document.webL10n = (function(window, document, undefined) {
        * @class
        * @alias StrikeOutAnnotationElement
        */
-      var StrikeOutAnnotationElement = (
-        function StrikeOutAnnotationElementClosure() {
-          function StrikeOutAnnotationElement(parameters) {
-            AnnotationElement.call(this, parameters);
+      var StrikeOutAnnotationElement = (function StrikeOutAnnotationElementClosure() {
+        function StrikeOutAnnotationElement(parameters) {
+          AnnotationElement.call(this, parameters);
+        }
+
+        Util.inherit(StrikeOutAnnotationElement, AnnotationElement, {
+          /**
+           * Render the strikeout annotation's HTML element in the empty container.
+           *
+           * @public
+           * @memberof StrikeOutAnnotationElement
+           * @returns {HTMLSectionElement}
+           */
+          render: function StrikeOutAnnotationElement_render() {
+            this.container.className = 'strikeoutAnnotation';
+            return this.container;
           }
+        });
 
-          Util.inherit(StrikeOutAnnotationElement, AnnotationElement, {
-            /**
-             * Render the strikeout annotation's HTML element in the empty container.
-             *
-             * @public
-             * @memberof StrikeOutAnnotationElement
-             * @returns {HTMLSectionElement}
-             */
-            render: function StrikeOutAnnotationElement_render() {
-              this.container.className = 'strikeoutAnnotation';
-              return this.container;
-            }
-          });
-
-          return StrikeOutAnnotationElement;
-        })();
+        return StrikeOutAnnotationElement;
+      })();
 
       /**
        * @typedef {Object} AnnotationLayerParameters
@@ -4896,6 +4949,7 @@ document.webL10n = (function(window, document, undefined) {
           nextRequestId: 0
         };
       }
+
       FontLoader.prototype = {
         insertRule: function fontLoaderInsertRule(rule) {
           var styleElement = this.styleElement;
@@ -4916,7 +4970,7 @@ document.webL10n = (function(window, document, undefined) {
             styleElement.parentNode.removeChild(styleElement);
             styleElement = this.styleElement = null;
           }
-          this.nativeFontFaces.forEach(function(nativeFontFace) {
+          this.nativeFontFaces.forEach(function (nativeFontFace) {
             document.fonts.delete(nativeFontFace);
           });
           this.nativeFontFaces.length = 0;
@@ -4961,10 +5015,10 @@ document.webL10n = (function(window, document, undefined) {
           var rules = [];
           var fontsToLoad = [];
           var fontLoadPromises = [];
-          var getNativeFontPromise = function(nativeFontFace) {
+          var getNativeFontPromise = function (nativeFontFace) {
             // Return a promise that is always fulfilled, even when the font fails to
             // load.
-            return nativeFontFace.loaded.catch(function(e) {
+            return nativeFontFace.loaded.catch(function (e) {
               warn('Failed to load font "' + nativeFontFace.family + '": ' + e);
             });
           };
@@ -4996,7 +5050,7 @@ document.webL10n = (function(window, document, undefined) {
 
           var request = this.queueLoadingCallback(callback);
           if (FontLoader.isFontLoadingAPISupported) {
-            Promise.all(fontLoadPromises).then(function() {
+            Promise.all(fontLoadPromises).then(function () {
               request.complete();
             });
           } else if (rules.length > 0 && !FontLoader.isSyncFontLoadingSupported) {
@@ -5061,10 +5115,11 @@ document.webL10n = (function(window, document, undefined) {
           var ctx = canvas.getContext('2d');
 
           var called = 0;
+
           function isFontReady(name, callback) {
             called++;
             // With setTimeout clamping this gives the font ~100ms to load.
-            if(called > 30) {
+            if (called > 30) {
               warn('Load test font never loaded.');
               callback();
               return;
@@ -5126,7 +5181,7 @@ document.webL10n = (function(window, document, undefined) {
           }
           document.body.appendChild(div);
 
-          isFontReady(loadTestFontId, function() {
+          isFontReady(loadTestFontId, function () {
             document.body.removeChild(div);
             request.complete();
           });
@@ -5164,6 +5219,7 @@ document.webL10n = (function(window, document, undefined) {
             this[i] = translatedData[i];
           }
         }
+
         Object.defineProperty(FontFaceObject, 'isEvalSupported', {
           get: function () {
             var evalSupport = false;
@@ -5172,7 +5228,8 @@ document.webL10n = (function(window, document, undefined) {
                 /* jshint evil: true */
                 new Function('');
                 evalSupport = true;
-              } catch (e) {}
+              } catch (e) {
+              }
             }
             return shadow(this, 'isEvalSupported', evalSupport);
           },
@@ -5225,46 +5282,45 @@ document.webL10n = (function(window, document, undefined) {
             return rule;
           },
 
-          getPathGenerator:
-            function FontFaceObject_getPathGenerator(objs, character) {
-              if (!(character in this.compiledGlyphs)) {
-                var cmds = objs.get(this.loadedName + '_path_' + character);
-                var current, i, len;
+          getPathGenerator: function FontFaceObject_getPathGenerator(objs, character) {
+            if (!(character in this.compiledGlyphs)) {
+              var cmds = objs.get(this.loadedName + '_path_' + character);
+              var current, i, len;
 
-                // If we can, compile cmds into JS for MAXIMUM SPEED
-                if (FontFaceObject.isEvalSupported) {
-                  var args, js = '';
+              // If we can, compile cmds into JS for MAXIMUM SPEED
+              if (FontFaceObject.isEvalSupported) {
+                var args, js = '';
+                for (i = 0, len = cmds.length; i < len; i++) {
+                  current = cmds[i];
+
+                  if (current.args !== undefined) {
+                    args = current.args.join(',');
+                  } else {
+                    args = '';
+                  }
+
+                  js += 'c.' + current.cmd + '(' + args + ');\n';
+                }
+                /* jshint -W054 */
+                this.compiledGlyphs[character] = new Function('c', 'size', js);
+              } else {
+                // But fall back on using Function.prototype.apply() if we're
+                // blocked from using eval() for whatever reason (like CSP policies)
+                this.compiledGlyphs[character] = function (c, size) {
                   for (i = 0, len = cmds.length; i < len; i++) {
                     current = cmds[i];
 
-                    if (current.args !== undefined) {
-                      args = current.args.join(',');
-                    } else {
-                      args = '';
+                    if (current.cmd === 'scale') {
+                      current.args = [size, -size];
                     }
 
-                    js += 'c.' + current.cmd + '(' + args + ');\n';
+                    c[current.cmd].apply(c, current.args);
                   }
-                  /* jshint -W054 */
-                  this.compiledGlyphs[character] = new Function('c', 'size', js);
-                } else {
-                  // But fall back on using Function.prototype.apply() if we're
-                  // blocked from using eval() for whatever reason (like CSP policies)
-                  this.compiledGlyphs[character] = function(c, size) {
-                    for (i = 0, len = cmds.length; i < len; i++) {
-                      current = cmds[i];
-
-                      if (current.cmd === 'scale') {
-                        current.args = [size, -size];
-                      }
-
-                      c[current.cmd].apply(c, current.args);
-                    }
-                  };
-                }
+                };
               }
-              return this.compiledGlyphs[character];
             }
+            return this.compiledGlyphs[character];
+          }
         };
         return FontFaceObject;
       })();
@@ -5284,9 +5340,9 @@ document.webL10n = (function(window, document, undefined) {
 
       var Metadata = PDFJS.Metadata = (function MetadataClosure() {
         function fixMetadata(meta) {
-          return meta.replace(/>\\376\\377([^<]+)/g, function(all, codes) {
+          return meta.replace(/>\\376\\377([^<]+)/g, function (all, codes) {
             var bytes = codes.replace(/\\([0-3])([0-7])([0-7])/g,
-              function(code, d1, d2, d3) {
+              function (code, d1, d2, d3) {
                 return String.fromCharCode(d1 * 64 + d2 * 8 + d3 * 1);
               });
             var chars = '';
@@ -5662,7 +5718,7 @@ document.webL10n = (function(window, document, undefined) {
               continue;
             }
 
-            if(opList[x].fn === 'restore') {
+            if (opList[x].fn === 'restore') {
               opTree = tmp.pop();
             } else {
               opTree.push(opList[x]);
@@ -5779,11 +5835,11 @@ document.webL10n = (function(window, document, undefined) {
                   var common = obj.substring(0, 2) === 'g_';
                   var promise;
                   if (common) {
-                    promise = new Promise(function(resolve) {
+                    promise = new Promise(function (resolve) {
                       self.commonObjs.get(obj, resolve);
                     });
                   } else {
-                    promise = new Promise(function(resolve) {
+                    promise = new Promise(function (resolve) {
                       self.objs.get(obj, resolve);
                     });
                   }
@@ -5826,7 +5882,7 @@ document.webL10n = (function(window, document, undefined) {
           convertOpList: function SVGGraphics_convertOpList(operatorList) {
             var argsArray = operatorList.argsArray;
             var fnArray = operatorList.fnArray;
-            var fnArrayLen  = fnArray.length;
+            var fnArrayLen = fnArray.length;
             var REVOPS = [];
             var opList = [];
 
@@ -5836,14 +5892,14 @@ document.webL10n = (function(window, document, undefined) {
 
             for (var x = 0; x < fnArrayLen; x++) {
               var fnId = fnArray[x];
-              opList.push({'fnId' : fnId, 'fn': REVOPS[fnId], 'args': argsArray[x]});
+              opList.push({'fnId': fnId, 'fn': REVOPS[fnId], 'args': argsArray[x]});
             }
             return opListToTree(opList);
           },
 
           executeOpTree: function SVGGraphics_executeOpTree(opTree) {
             var opTreeLen = opTree.length;
-            for(var x = 0; x < opTreeLen; x++) {
+            for (var x = 0; x < opTreeLen; x++) {
               var fn = opTree[x].fn;
               var fnId = opTree[x].fnId;
               var args = opTree[x].args;
@@ -5978,7 +6034,7 @@ document.webL10n = (function(window, document, undefined) {
                   this.group(opTree[x].items);
                   break;
                 default:
-                  warn('Unimplemented method '+ fn);
+                  warn('Unimplemented method ' + fn);
                   break;
               }
             }
@@ -6099,7 +6155,7 @@ document.webL10n = (function(window, document, undefined) {
 
             current.txtElement.setAttributeNS(null, 'transform',
               pm(current.textMatrix) +
-              ' scale(1, -1)' );
+              ' scale(1, -1)');
             current.txtElement.setAttributeNS(XML_NS, 'xml:space', 'preserve');
             current.txtElement.appendChild(current.tspan);
             current.txtgrp.appendChild(current.txtElement);
@@ -6132,8 +6188,7 @@ document.webL10n = (function(window, document, undefined) {
             var size = details[1];
             this.current.font = fontObj;
 
-            if (this.embedFonts && fontObj.data &&
-              !this.embeddedFonts[fontObj.loadedName]) {
+            if (this.embedFonts && fontObj.data && !this.embeddedFonts[fontObj.loadedName]) {
               this.addFontStyle(fontObj);
               this.embeddedFonts[fontObj.loadedName] = fontObj;
             }
@@ -6216,7 +6271,7 @@ document.webL10n = (function(window, document, undefined) {
                   var height = args[j++];
                   var xw = x + width;
                   var yh = y + height;
-                  d.push('M', pf(x), pf(y), 'L', pf(xw) , pf(y), 'L', pf(xw), pf(yh),
+                  d.push('M', pf(x), pf(y), 'L', pf(xw), pf(y), 'L', pf(xw), pf(yh),
                     'L', pf(x), pf(yh), 'Z');
                   break;
                 case OPS.moveTo:
@@ -6227,7 +6282,7 @@ document.webL10n = (function(window, document, undefined) {
                 case OPS.lineTo:
                   x = args[j++];
                   y = args[j++];
-                  d.push('L', pf(x) , pf(y));
+                  d.push('L', pf(x), pf(y));
                   break;
                 case OPS.curveTo:
                   x = args[j + 4];
@@ -6417,17 +6472,16 @@ document.webL10n = (function(window, document, undefined) {
             this.fillStroke();
           },
 
-          paintSolidColorImageMask:
-            function SVGGraphics_paintSolidColorImageMask() {
-              var current = this.current;
-              var rect = document.createElementNS(NS, 'svg:rect');
-              rect.setAttributeNS(null, 'x', '0');
-              rect.setAttributeNS(null, 'y', '0');
-              rect.setAttributeNS(null, 'width', '1px');
-              rect.setAttributeNS(null, 'height', '1px');
-              rect.setAttributeNS(null, 'fill', current.fillColor);
-              this.tgrp.appendChild(rect);
-            },
+          paintSolidColorImageMask: function SVGGraphics_paintSolidColorImageMask() {
+            var current = this.current;
+            var rect = document.createElementNS(NS, 'svg:rect');
+            rect.setAttributeNS(null, 'x', '0');
+            rect.setAttributeNS(null, 'y', '0');
+            rect.setAttributeNS(null, 'width', '1px');
+            rect.setAttributeNS(null, 'height', '1px');
+            rect.setAttributeNS(null, 'fill', current.fillColor);
+            this.tgrp.appendChild(rect);
+          },
 
           paintJpegXObject: function SVGGraphics_paintJpegXObject(objId, w, h) {
             var current = this.current;
@@ -6459,94 +6513,90 @@ document.webL10n = (function(window, document, undefined) {
             this.paintInlineImageXObject(imgData);
           },
 
-          paintInlineImageXObject:
-            function SVGGraphics_paintInlineImageXObject(imgData, mask) {
-              var current = this.current;
-              var width = imgData.width;
-              var height = imgData.height;
+          paintInlineImageXObject: function SVGGraphics_paintInlineImageXObject(imgData, mask) {
+            var current = this.current;
+            var width = imgData.width;
+            var height = imgData.height;
 
-              var imgSrc = convertImgDataToPng(imgData);
+            var imgSrc = convertImgDataToPng(imgData);
+            var cliprect = document.createElementNS(NS, 'svg:rect');
+            cliprect.setAttributeNS(null, 'x', '0');
+            cliprect.setAttributeNS(null, 'y', '0');
+            cliprect.setAttributeNS(null, 'width', pf(width));
+            cliprect.setAttributeNS(null, 'height', pf(height));
+            current.element = cliprect;
+            this.clip('nonzero');
+            var imgEl = document.createElementNS(NS, 'svg:image');
+            imgEl.setAttributeNS(XLINK_NS, 'xlink:href', imgSrc);
+            imgEl.setAttributeNS(null, 'x', '0');
+            imgEl.setAttributeNS(null, 'y', pf(-height));
+            imgEl.setAttributeNS(null, 'width', pf(width) + 'px');
+            imgEl.setAttributeNS(null, 'height', pf(height) + 'px');
+            imgEl.setAttributeNS(null, 'transform',
+              'scale(' + pf(1 / width) + ' ' +
+              pf(-1 / height) + ')');
+            if (mask) {
+              mask.appendChild(imgEl);
+            } else {
+              this.tgrp.appendChild(imgEl);
+            }
+            if (current.pendingClip) {
+              this.cgrp.appendChild(this.tgrp);
+              this.pgrp.appendChild(this.cgrp);
+            } else {
+              this.pgrp.appendChild(this.tgrp);
+            }
+          },
+
+          paintImageMaskXObject: function SVGGraphics_paintImageMaskXObject(imgData) {
+            var current = this.current;
+            var width = imgData.width;
+            var height = imgData.height;
+            var fillColor = current.fillColor;
+
+            current.maskId = 'mask' + maskCount++;
+            var mask = document.createElementNS(NS, 'svg:mask');
+            mask.setAttributeNS(null, 'id', current.maskId);
+
+            var rect = document.createElementNS(NS, 'svg:rect');
+            rect.setAttributeNS(null, 'x', '0');
+            rect.setAttributeNS(null, 'y', '0');
+            rect.setAttributeNS(null, 'width', pf(width));
+            rect.setAttributeNS(null, 'height', pf(height));
+            rect.setAttributeNS(null, 'fill', fillColor);
+            rect.setAttributeNS(null, 'mask', 'url(#' + current.maskId + ')');
+            this.defs.appendChild(mask);
+            this.tgrp.appendChild(rect);
+
+            this.paintInlineImageXObject(imgData, mask);
+          },
+
+          paintFormXObjectBegin: function SVGGraphics_paintFormXObjectBegin(matrix, bbox) {
+            this.save();
+
+            if (isArray(matrix) && matrix.length === 6) {
+              this.transform(matrix[0], matrix[1], matrix[2],
+                matrix[3], matrix[4], matrix[5]);
+            }
+
+            if (isArray(bbox) && bbox.length === 4) {
+              var width = bbox[2] - bbox[0];
+              var height = bbox[3] - bbox[1];
+
               var cliprect = document.createElementNS(NS, 'svg:rect');
-              cliprect.setAttributeNS(null, 'x', '0');
-              cliprect.setAttributeNS(null, 'y', '0');
+              cliprect.setAttributeNS(null, 'x', bbox[0]);
+              cliprect.setAttributeNS(null, 'y', bbox[1]);
               cliprect.setAttributeNS(null, 'width', pf(width));
               cliprect.setAttributeNS(null, 'height', pf(height));
-              current.element = cliprect;
+              this.current.element = cliprect;
               this.clip('nonzero');
-              var imgEl = document.createElementNS(NS, 'svg:image');
-              imgEl.setAttributeNS(XLINK_NS, 'xlink:href', imgSrc);
-              imgEl.setAttributeNS(null, 'x', '0');
-              imgEl.setAttributeNS(null, 'y', pf(-height));
-              imgEl.setAttributeNS(null, 'width', pf(width) + 'px');
-              imgEl.setAttributeNS(null, 'height', pf(height) + 'px');
-              imgEl.setAttributeNS(null, 'transform',
-                'scale(' + pf(1 / width) + ' ' +
-                pf(-1 / height) + ')');
-              if (mask) {
-                mask.appendChild(imgEl);
-              } else {
-                this.tgrp.appendChild(imgEl);
-              }
-              if (current.pendingClip) {
-                this.cgrp.appendChild(this.tgrp);
-                this.pgrp.appendChild(this.cgrp);
-              } else {
-                this.pgrp.appendChild(this.tgrp);
-              }
-            },
-
-          paintImageMaskXObject:
-            function SVGGraphics_paintImageMaskXObject(imgData) {
-              var current = this.current;
-              var width = imgData.width;
-              var height = imgData.height;
-              var fillColor = current.fillColor;
-
-              current.maskId = 'mask' + maskCount++;
-              var mask = document.createElementNS(NS, 'svg:mask');
-              mask.setAttributeNS(null, 'id', current.maskId);
-
-              var rect = document.createElementNS(NS, 'svg:rect');
-              rect.setAttributeNS(null, 'x', '0');
-              rect.setAttributeNS(null, 'y', '0');
-              rect.setAttributeNS(null, 'width', pf(width));
-              rect.setAttributeNS(null, 'height', pf(height));
-              rect.setAttributeNS(null, 'fill', fillColor);
-              rect.setAttributeNS(null, 'mask', 'url(#' + current.maskId +')');
-              this.defs.appendChild(mask);
-              this.tgrp.appendChild(rect);
-
-              this.paintInlineImageXObject(imgData, mask);
-            },
-
-          paintFormXObjectBegin:
-            function SVGGraphics_paintFormXObjectBegin(matrix, bbox) {
-              this.save();
-
-              if (isArray(matrix) && matrix.length === 6) {
-                this.transform(matrix[0], matrix[1], matrix[2],
-                  matrix[3], matrix[4], matrix[5]);
-              }
-
-              if (isArray(bbox) && bbox.length === 4) {
-                var width = bbox[2] - bbox[0];
-                var height = bbox[3] - bbox[1];
-
-                var cliprect = document.createElementNS(NS, 'svg:rect');
-                cliprect.setAttributeNS(null, 'x', bbox[0]);
-                cliprect.setAttributeNS(null, 'y', bbox[1]);
-                cliprect.setAttributeNS(null, 'width', pf(width));
-                cliprect.setAttributeNS(null, 'height', pf(height));
-                this.current.element = cliprect;
-                this.clip('nonzero');
-                this.endPath();
-              }
-            },
-
-          paintFormXObjectEnd:
-            function SVGGraphics_paintFormXObjectEnd() {
-              this.restore();
+              this.endPath();
             }
+          },
+
+          paintFormXObjectEnd: function SVGGraphics_paintFormXObjectEnd() {
+            this.restore();
+          }
         };
         return SVGGraphics;
       })();
@@ -6705,7 +6755,7 @@ document.webL10n = (function(window, document, undefined) {
                 transform = 'rotate(' + rotation + 'deg) ' + transform;
               }
               if (transform) {
-                CustomStyle.setProp('transform' , textDiv, transform);
+                CustomStyle.setProp('transform', textDiv, transform);
               }
             }
           }
@@ -6731,6 +6781,7 @@ document.webL10n = (function(window, document, undefined) {
           this._capability = createPromiseCapability();
           this._renderTimer = null;
         }
+
         TextLayerRenderTask.prototype = {
           get promise() {
             return this._capability.promise;
@@ -6758,7 +6809,7 @@ document.webL10n = (function(window, document, undefined) {
               render(this);
             } else { // Schedule
               var self = this;
-              this._renderTimer = setTimeout(function() {
+              this._renderTimer = setTimeout(function () {
                 render(self);
                 self._renderTimer = null;
               }, timeout);
@@ -6811,12 +6862,15 @@ document.webL10n = (function(window, document, undefined) {
           }
           return shader;
         }
+
         function createVertexShader(gl, code) {
           return loadShader(gl, code, gl.VERTEX_SHADER);
         }
+
         function createFragmentShader(gl, code) {
           return loadShader(gl, code, gl.FRAGMENT_SHADER);
         }
+
         function createProgram(gl, shaders) {
           var program = gl.createProgram();
           for (var i = 0, ii = shaders.length; i < ii; ++i) {
@@ -6830,6 +6884,7 @@ document.webL10n = (function(window, document, undefined) {
           }
           return program;
         }
+
         function createTexture(gl, image, textureId) {
           gl.activeTexture(textureId);
           var texture = gl.createTexture();
@@ -6847,13 +6902,14 @@ document.webL10n = (function(window, document, undefined) {
         }
 
         var currentGL, currentCanvas;
+
         function generateGL() {
           if (currentGL) {
             return;
           }
           currentCanvas = document.createElement('canvas');
           currentGL = currentCanvas.getContext('webgl',
-            { premultipliedalpha: false });
+            {premultipliedalpha: false});
         }
 
         var smaskVertexShaderCode = '\
@@ -6933,12 +6989,12 @@ document.webL10n = (function(window, document, undefined) {
           var texCoordBuffer = gl.createBuffer();
           gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
           gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-            0.0,  0.0,
-            1.0,  0.0,
-            0.0,  1.0,
-            0.0,  1.0,
-            1.0,  0.0,
-            1.0,  1.0]), gl.STATIC_DRAW);
+            0.0, 0.0,
+            1.0, 0.0,
+            0.0, 1.0,
+            0.0, 1.0,
+            1.0, 0.0,
+            1.0, 1.0]), gl.STATIC_DRAW);
           gl.enableVertexAttribArray(texCoordLocation);
           gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
 
@@ -6954,7 +7010,7 @@ document.webL10n = (function(window, document, undefined) {
           if (!smaskCache) {
             initSmaskGL();
           }
-          var cache = smaskCache,canvas = cache.canvas, gl = cache.gl;
+          var cache = smaskCache, canvas = cache.canvas, gl = cache.gl;
           canvas.width = width;
           canvas.height = height;
           gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
@@ -7207,7 +7263,8 @@ document.webL10n = (function(window, document, undefined) {
             try {
               generateGL();
               enabled = !!currentGL;
-            } catch (e) { }
+            } catch (e) {
+            }
             return shadow(this, 'isEnabled', enabled);
           },
           composeSMask: composeSMask,
@@ -7270,13 +7327,28 @@ document.webL10n = (function(window, document, undefined) {
           var bytes = data.data, rowSize = data.width * 4;
           var tmp;
           if (coords[p1 + 1] > coords[p2 + 1]) {
-            tmp = p1; p1 = p2; p2 = tmp; tmp = c1; c1 = c2; c2 = tmp;
+            tmp = p1;
+            p1 = p2;
+            p2 = tmp;
+            tmp = c1;
+            c1 = c2;
+            c2 = tmp;
           }
           if (coords[p2 + 1] > coords[p3 + 1]) {
-            tmp = p2; p2 = p3; p3 = tmp; tmp = c2; c2 = c3; c3 = tmp;
+            tmp = p2;
+            p2 = p3;
+            p3 = tmp;
+            tmp = c2;
+            c2 = c3;
+            c3 = tmp;
           }
           if (coords[p1 + 1] > coords[p2 + 1]) {
-            tmp = p1; p1 = p2; p2 = tmp; tmp = c1; c1 = c2; c2 = tmp;
+            tmp = p1;
+            p1 = p2;
+            p2 = tmp;
+            tmp = c1;
+            c1 = c2;
+            c2 = tmp;
           }
           var x1 = (coords[p1] + context.offsetX) * context.scaleX;
           var y1 = (coords[p1 + 1] + context.offsetY) * context.scaleY;
@@ -7421,9 +7493,12 @@ document.webL10n = (function(window, document, undefined) {
             canvas = tmpCanvas.canvas;
           }
 
-          return {canvas: canvas, offsetX: offsetX, offsetY: offsetY,
-            scaleX: scaleX, scaleY: scaleY};
+          return {
+            canvas: canvas, offsetX: offsetX, offsetY: offsetY,
+            scaleX: scaleX, scaleY: scaleY
+          };
         }
+
         return createMeshCanvas;
       })();
 
@@ -7605,23 +7680,22 @@ document.webL10n = (function(window, document, undefined) {
             }
           },
 
-          setFillAndStrokeStyleToContext:
-            function setFillAndStrokeStyleToContext(context, paintType, color) {
-              switch (paintType) {
-                case PaintType.COLORED:
-                  var ctx = this.ctx;
-                  context.fillStyle = ctx.fillStyle;
-                  context.strokeStyle = ctx.strokeStyle;
-                  break;
-                case PaintType.UNCOLORED:
-                  var cssColor = Util.makeCssRgb(color[0], color[1], color[2]);
-                  context.fillStyle = cssColor;
-                  context.strokeStyle = cssColor;
-                  break;
-                default:
-                  error('Unsupported paint type: ' + paintType);
-              }
-            },
+          setFillAndStrokeStyleToContext: function setFillAndStrokeStyleToContext(context, paintType, color) {
+            switch (paintType) {
+              case PaintType.COLORED:
+                var ctx = this.ctx;
+                context.fillStyle = ctx.fillStyle;
+                context.strokeStyle = ctx.strokeStyle;
+                break;
+              case PaintType.UNCOLORED:
+                var cssColor = Util.makeCssRgb(color[0], color[1], color[2]);
+                context.fillStyle = cssColor;
+                context.strokeStyle = cssColor;
+                break;
+              default:
+                error('Unsupported paint type: ' + paintType);
+            }
+          },
 
           getPattern: function TilingPattern_getPattern(ctx, owner) {
             var temporaryPatternCanvas = this.createPatternCanvas(owner);
@@ -7812,6 +7886,7 @@ document.webL10n = (function(window, document, undefined) {
         function CachedCanvases() {
           this.cache = Object.create(null);
         }
+
         CachedCanvases.prototype = {
           getCanvas: function CachedCanvases_getCanvas(id, width, height,
                                                        trackTransform) {
@@ -7985,7 +8060,7 @@ document.webL10n = (function(window, document, undefined) {
           --i;
         }
 
-        var drawOutline = function(c) {
+        var drawOutline = function (c) {
           c.save();
           // the path shall be painted in [0..1]x[0..1] space
           c.scale(1 / width, -1 / height);
@@ -7995,7 +8070,7 @@ document.webL10n = (function(window, document, undefined) {
             var o = outlines[i];
             c.moveTo(o[0], o[1]);
             for (var j = 2, jj = o.length; j < jj; j += 2) {
-              c.lineTo(o[j], o[j+1]);
+              c.lineTo(o[j], o[j + 1]);
             }
           }
           c.fill();
@@ -8257,7 +8332,7 @@ document.webL10n = (function(window, document, undefined) {
           }
           if (sourceCtx.setLineDash !== undefined) {
             destCtx.setLineDash(sourceCtx.getLineDash());
-            destCtx.lineDashOffset =  sourceCtx.lineDashOffset;
+            destCtx.lineDashOffset = sourceCtx.lineDashOffset;
           } else if (sourceCtx.mozDashOffset !== undefined) {
             destCtx.mozDash = sourceCtx.mozDash;
             destCtx.mozDashOffset = sourceCtx.mozDashOffset;
@@ -8401,10 +8476,9 @@ document.webL10n = (function(window, document, undefined) {
             }
           },
 
-          executeOperatorList: function CanvasGraphics_executeOperatorList(
-            operatorList,
-            executionStartIdx, continueCallback,
-            stepper) {
+          executeOperatorList: function CanvasGraphics_executeOperatorList(operatorList,
+                                                                           executionStartIdx, continueCallback,
+                                                                           stepper) {
             var argsArray = operatorList.argsArray;
             var fnArray = operatorList.fnArray;
             var i = executionStartIdx || 0;
@@ -8563,7 +8637,7 @@ document.webL10n = (function(window, document, undefined) {
                 case 'BM':
                   if (value && value.name && (value.name !== 'Normal')) {
                     var mode = value.name.replace(/([A-Z])/g,
-                      function(c) {
+                      function (c) {
                         return '-' + c.toLowerCase();
                       }
                     ).substring(1);
@@ -9035,8 +9109,7 @@ document.webL10n = (function(window, document, undefined) {
             var widthAdvanceScale = fontSize * current.fontMatrix[0];
 
             var simpleFillText =
-              current.textRenderingMode === TextRenderingMode.FILL &&
-              !font.disableFontFace;
+              current.textRenderingMode === TextRenderingMode.FILL && !font.disableFontFace;
 
             ctx.save();
             ctx.transform.apply(ctx, current.textMatrix);
@@ -9399,7 +9472,7 @@ document.webL10n = (function(window, document, undefined) {
             var cacheId = 'groupAt' + this.groupLevel;
             if (group.smask) {
               // Using two cache entries is case if masks are used one after another.
-              cacheId +=  '_smask_' + ((this.smaskCounter++) % 2);
+              cacheId += '_smask_' + ((this.smaskCounter++) % 2);
             }
             var scratchCanvas = this.cachedCanvases.getCanvas(
               cacheId, drawnWidth, drawnHeight, true);
@@ -9565,20 +9638,54 @@ document.webL10n = (function(window, document, undefined) {
             this.paintInlineImageXObject(maskCanvas.canvas);
           },
 
-          paintImageMaskXObjectRepeat:
-            function CanvasGraphics_paintImageMaskXObjectRepeat(imgData, scaleX,
-                                                                scaleY, positions) {
-              var width = imgData.width;
-              var height = imgData.height;
-              var fillColor = this.current.fillColor;
-              var isPatternFill = this.current.patternFill;
+          paintImageMaskXObjectRepeat: function CanvasGraphics_paintImageMaskXObjectRepeat(imgData, scaleX,
+                                                                                           scaleY, positions) {
+            var width = imgData.width;
+            var height = imgData.height;
+            var fillColor = this.current.fillColor;
+            var isPatternFill = this.current.patternFill;
+
+            var maskCanvas = this.cachedCanvases.getCanvas('maskCanvas',
+              width, height);
+            var maskCtx = maskCanvas.context;
+            maskCtx.save();
+
+            putBinaryImageMask(maskCtx, imgData);
+
+            maskCtx.globalCompositeOperation = 'source-in';
+
+            maskCtx.fillStyle = isPatternFill ?
+              fillColor.getPattern(maskCtx, this) : fillColor;
+            maskCtx.fillRect(0, 0, width, height);
+
+            maskCtx.restore();
+
+            var ctx = this.ctx;
+            for (var i = 0, ii = positions.length; i < ii; i += 2) {
+              ctx.save();
+              ctx.transform(scaleX, 0, 0, scaleY, positions[i], positions[i + 1]);
+              ctx.scale(1, -1);
+              ctx.drawImage(maskCanvas.canvas, 0, 0, width, height,
+                0, -1, 1, 1);
+              ctx.restore();
+            }
+          },
+
+          paintImageMaskXObjectGroup: function CanvasGraphics_paintImageMaskXObjectGroup(images) {
+            var ctx = this.ctx;
+
+            var fillColor = this.current.fillColor;
+            var isPatternFill = this.current.patternFill;
+            for (var i = 0, ii = images.length; i < ii; i++) {
+              var image = images[i];
+              var width = image.width, height = image.height;
 
               var maskCanvas = this.cachedCanvases.getCanvas('maskCanvas',
                 width, height);
               var maskCtx = maskCanvas.context;
               maskCtx.save();
 
-              putBinaryImageMask(maskCtx, imgData);
+              putBinaryImageMask(maskCtx, image);
 
               maskCtx.globalCompositeOperation = 'source-in';
 
@@ -9588,50 +9695,14 @@ document.webL10n = (function(window, document, undefined) {
 
               maskCtx.restore();
 
-              var ctx = this.ctx;
-              for (var i = 0, ii = positions.length; i < ii; i += 2) {
-                ctx.save();
-                ctx.transform(scaleX, 0, 0, scaleY, positions[i], positions[i + 1]);
-                ctx.scale(1, -1);
-                ctx.drawImage(maskCanvas.canvas, 0, 0, width, height,
-                  0, -1, 1, 1);
-                ctx.restore();
-              }
-            },
-
-          paintImageMaskXObjectGroup:
-            function CanvasGraphics_paintImageMaskXObjectGroup(images) {
-              var ctx = this.ctx;
-
-              var fillColor = this.current.fillColor;
-              var isPatternFill = this.current.patternFill;
-              for (var i = 0, ii = images.length; i < ii; i++) {
-                var image = images[i];
-                var width = image.width, height = image.height;
-
-                var maskCanvas = this.cachedCanvases.getCanvas('maskCanvas',
-                  width, height);
-                var maskCtx = maskCanvas.context;
-                maskCtx.save();
-
-                putBinaryImageMask(maskCtx, image);
-
-                maskCtx.globalCompositeOperation = 'source-in';
-
-                maskCtx.fillStyle = isPatternFill ?
-                  fillColor.getPattern(maskCtx, this) : fillColor;
-                maskCtx.fillRect(0, 0, width, height);
-
-                maskCtx.restore();
-
-                ctx.save();
-                ctx.transform.apply(ctx, image.transform);
-                ctx.scale(1, -1);
-                ctx.drawImage(maskCanvas.canvas, 0, 0, width, height,
-                  0, -1, 1, 1);
-                ctx.restore();
-              }
-            },
+              ctx.save();
+              ctx.transform.apply(ctx, image.transform);
+              ctx.scale(1, -1);
+              ctx.drawImage(maskCanvas.canvas, 0, 0, width, height,
+                0, -1, 1, 1);
+              ctx.restore();
+            }
+          },
 
           paintImageXObject: function CanvasGraphics_paintImageXObject(objId) {
             var imgData = this.objs.get(objId);
@@ -9643,131 +9714,129 @@ document.webL10n = (function(window, document, undefined) {
             this.paintInlineImageXObject(imgData);
           },
 
-          paintImageXObjectRepeat:
-            function CanvasGraphics_paintImageXObjectRepeat(objId, scaleX, scaleY,
-                                                            positions) {
-              var imgData = this.objs.get(objId);
-              if (!imgData) {
-                warn('Dependent image isn\'t ready yet');
-                return;
+          paintImageXObjectRepeat: function CanvasGraphics_paintImageXObjectRepeat(objId, scaleX, scaleY,
+                                                                                   positions) {
+            var imgData = this.objs.get(objId);
+            if (!imgData) {
+              warn('Dependent image isn\'t ready yet');
+              return;
+            }
+
+            var width = imgData.width;
+            var height = imgData.height;
+            var map = [];
+            for (var i = 0, ii = positions.length; i < ii; i += 2) {
+              map.push({
+                transform: [scaleX, 0, 0, scaleY, positions[i],
+                  positions[i + 1]], x: 0, y: 0, w: width, h: height
+              });
+            }
+            this.paintInlineImageXObjectGroup(imgData, map);
+          },
+
+          paintInlineImageXObject: function CanvasGraphics_paintInlineImageXObject(imgData) {
+            var width = imgData.width;
+            var height = imgData.height;
+            var ctx = this.ctx;
+
+            this.save();
+            // scale the image to the unit square
+            ctx.scale(1 / width, -1 / height);
+
+            var currentTransform = ctx.mozCurrentTransformInverse;
+            var a = currentTransform[0], b = currentTransform[1];
+            var widthScale = Math.max(Math.sqrt(a * a + b * b), 1);
+            var c = currentTransform[2], d = currentTransform[3];
+            var heightScale = Math.max(Math.sqrt(c * c + d * d), 1);
+
+            var imgToPaint, tmpCanvas;
+            // instanceof HTMLElement does not work in jsdom node.js module
+            if (imgData instanceof HTMLElement || !imgData.data) {
+              imgToPaint = imgData;
+            } else {
+              tmpCanvas = this.cachedCanvases.getCanvas('inlineImage',
+                width, height);
+              var tmpCtx = tmpCanvas.context;
+              putBinaryImageData(tmpCtx, imgData);
+              imgToPaint = tmpCanvas.canvas;
+            }
+
+            var paintWidth = width, paintHeight = height;
+            var tmpCanvasId = 'prescale1';
+            // Vertial or horizontal scaling shall not be more than 2 to not loose the
+            // pixels during drawImage operation, painting on the temporary canvas(es)
+            // that are twice smaller in size
+            while ((widthScale > 2 && paintWidth > 1) ||
+            (heightScale > 2 && paintHeight > 1)) {
+              var newWidth = paintWidth, newHeight = paintHeight;
+              if (widthScale > 2 && paintWidth > 1) {
+                newWidth = Math.ceil(paintWidth / 2);
+                widthScale /= paintWidth / newWidth;
               }
-
-              var width = imgData.width;
-              var height = imgData.height;
-              var map = [];
-              for (var i = 0, ii = positions.length; i < ii; i += 2) {
-                map.push({transform: [scaleX, 0, 0, scaleY, positions[i],
-                  positions[i + 1]], x: 0, y: 0, w: width, h: height});
+              if (heightScale > 2 && paintHeight > 1) {
+                newHeight = Math.ceil(paintHeight / 2);
+                heightScale /= paintHeight / newHeight;
               }
-              this.paintInlineImageXObjectGroup(imgData, map);
-            },
+              tmpCanvas = this.cachedCanvases.getCanvas(tmpCanvasId,
+                newWidth, newHeight);
+              tmpCtx = tmpCanvas.context;
+              tmpCtx.clearRect(0, 0, newWidth, newHeight);
+              tmpCtx.drawImage(imgToPaint, 0, 0, paintWidth, paintHeight,
+                0, 0, newWidth, newHeight);
+              imgToPaint = tmpCanvas.canvas;
+              paintWidth = newWidth;
+              paintHeight = newHeight;
+              tmpCanvasId = tmpCanvasId === 'prescale1' ? 'prescale2' : 'prescale1';
+            }
+            ctx.drawImage(imgToPaint, 0, 0, paintWidth, paintHeight,
+              0, -height, width, height);
 
-          paintInlineImageXObject:
-            function CanvasGraphics_paintInlineImageXObject(imgData) {
-              var width = imgData.width;
-              var height = imgData.height;
-              var ctx = this.ctx;
+            if (this.imageLayer) {
+              var position = this.getCanvasPosition(0, -height);
+              this.imageLayer.appendImage({
+                imgData: imgData,
+                left: position[0],
+                top: position[1],
+                width: width / currentTransform[0],
+                height: height / currentTransform[3]
+              });
+            }
+            this.restore();
+          },
 
-              this.save();
-              // scale the image to the unit square
-              ctx.scale(1 / width, -1 / height);
+          paintInlineImageXObjectGroup: function CanvasGraphics_paintInlineImageXObjectGroup(imgData, map) {
+            var ctx = this.ctx;
+            var w = imgData.width;
+            var h = imgData.height;
 
-              var currentTransform = ctx.mozCurrentTransformInverse;
-              var a = currentTransform[0], b = currentTransform[1];
-              var widthScale = Math.max(Math.sqrt(a * a + b * b), 1);
-              var c = currentTransform[2], d = currentTransform[3];
-              var heightScale = Math.max(Math.sqrt(c * c + d * d), 1);
+            var tmpCanvas = this.cachedCanvases.getCanvas('inlineImage', w, h);
+            var tmpCtx = tmpCanvas.context;
+            putBinaryImageData(tmpCtx, imgData);
 
-              var imgToPaint, tmpCanvas;
-              // instanceof HTMLElement does not work in jsdom node.js module
-              if (imgData instanceof HTMLElement || !imgData.data) {
-                imgToPaint = imgData;
-              } else {
-                tmpCanvas = this.cachedCanvases.getCanvas('inlineImage',
-                  width, height);
-                var tmpCtx = tmpCanvas.context;
-                putBinaryImageData(tmpCtx, imgData);
-                imgToPaint = tmpCanvas.canvas;
-              }
-
-              var paintWidth = width, paintHeight = height;
-              var tmpCanvasId = 'prescale1';
-              // Vertial or horizontal scaling shall not be more than 2 to not loose the
-              // pixels during drawImage operation, painting on the temporary canvas(es)
-              // that are twice smaller in size
-              while ((widthScale > 2 && paintWidth > 1) ||
-              (heightScale > 2 && paintHeight > 1)) {
-                var newWidth = paintWidth, newHeight = paintHeight;
-                if (widthScale > 2 && paintWidth > 1) {
-                  newWidth = Math.ceil(paintWidth / 2);
-                  widthScale /= paintWidth / newWidth;
-                }
-                if (heightScale > 2 && paintHeight > 1) {
-                  newHeight = Math.ceil(paintHeight / 2);
-                  heightScale /= paintHeight / newHeight;
-                }
-                tmpCanvas = this.cachedCanvases.getCanvas(tmpCanvasId,
-                  newWidth, newHeight);
-                tmpCtx = tmpCanvas.context;
-                tmpCtx.clearRect(0, 0, newWidth, newHeight);
-                tmpCtx.drawImage(imgToPaint, 0, 0, paintWidth, paintHeight,
-                  0, 0, newWidth, newHeight);
-                imgToPaint = tmpCanvas.canvas;
-                paintWidth = newWidth;
-                paintHeight = newHeight;
-                tmpCanvasId = tmpCanvasId === 'prescale1' ? 'prescale2' : 'prescale1';
-              }
-              ctx.drawImage(imgToPaint, 0, 0, paintWidth, paintHeight,
-                0, -height, width, height);
-
+            for (var i = 0, ii = map.length; i < ii; i++) {
+              var entry = map[i];
+              ctx.save();
+              ctx.transform.apply(ctx, entry.transform);
+              ctx.scale(1, -1);
+              ctx.drawImage(tmpCanvas.canvas, entry.x, entry.y, entry.w, entry.h,
+                0, -1, 1, 1);
               if (this.imageLayer) {
-                var position = this.getCanvasPosition(0, -height);
+                var position = this.getCanvasPosition(entry.x, entry.y);
                 this.imageLayer.appendImage({
                   imgData: imgData,
                   left: position[0],
                   top: position[1],
-                  width: width / currentTransform[0],
-                  height: height / currentTransform[3]
+                  width: w,
+                  height: h
                 });
               }
-              this.restore();
-            },
+              ctx.restore();
+            }
+          },
 
-          paintInlineImageXObjectGroup:
-            function CanvasGraphics_paintInlineImageXObjectGroup(imgData, map) {
-              var ctx = this.ctx;
-              var w = imgData.width;
-              var h = imgData.height;
-
-              var tmpCanvas = this.cachedCanvases.getCanvas('inlineImage', w, h);
-              var tmpCtx = tmpCanvas.context;
-              putBinaryImageData(tmpCtx, imgData);
-
-              for (var i = 0, ii = map.length; i < ii; i++) {
-                var entry = map[i];
-                ctx.save();
-                ctx.transform.apply(ctx, entry.transform);
-                ctx.scale(1, -1);
-                ctx.drawImage(tmpCanvas.canvas, entry.x, entry.y, entry.w, entry.h,
-                  0, -1, 1, 1);
-                if (this.imageLayer) {
-                  var position = this.getCanvasPosition(entry.x, entry.y);
-                  this.imageLayer.appendImage({
-                    imgData: imgData,
-                    left: position[0],
-                    top: position[1],
-                    width: w,
-                    height: h
-                  });
-                }
-                ctx.restore();
-              }
-            },
-
-          paintSolidColorImageMask:
-            function CanvasGraphics_paintSolidColorImageMask() {
-              this.ctx.fillRect(0, 0, 1, 1);
-            },
+          paintSolidColorImageMask: function CanvasGraphics_paintSolidColorImageMask() {
+            this.ctx.fillRect(0, 0, 1, 1);
+          },
 
           paintXObject: function CanvasGraphics_paintXObject() {
             warn('Unsupported \'paintXObject\' command.');
@@ -9784,8 +9853,7 @@ document.webL10n = (function(window, document, undefined) {
           beginMarkedContent: function CanvasGraphics_beginMarkedContent(tag) {
             // TODO Marked content.
           },
-          beginMarkedContentProps: function CanvasGraphics_beginMarkedContentProps(
-            tag, properties) {
+          beginMarkedContentProps: function CanvasGraphics_beginMarkedContentProps(tag, properties) {
             // TODO Marked content.
           },
           endMarkedContent: function CanvasGraphics_endMarkedContent() {
@@ -10184,7 +10252,8 @@ document.webL10n = (function(window, document, undefined) {
             pdfDataRangeTransport.length = src.length;
             pdfDataRangeTransport.initialData = src.initialData;
             if (!pdfDataRangeTransport.abort) {
-              pdfDataRangeTransport.abort = function () {};
+              pdfDataRangeTransport.abort = function () {
+              };
             }
           }
           src = Object.create(src);
@@ -10195,11 +10264,11 @@ document.webL10n = (function(window, document, undefined) {
 
         var source;
         if (typeof src === 'string') {
-          source = { url: src };
+          source = {url: src};
         } else if (isArrayBuffer(src)) {
-          source = { data: src };
+          source = {data: src};
         } else if (src instanceof PDFDataRangeTransport) {
-          source = { range: src };
+          source = {range: src};
         } else {
           if (typeof src !== 'object') {
             error('Invalid parameter in getDocument, need either Uint8Array, ' +
@@ -10231,8 +10300,7 @@ document.webL10n = (function(window, document, undefined) {
             var pdfBytes = source[key];
             if (typeof pdfBytes === 'string') {
               params[key] = stringToBytes(pdfBytes);
-            } else if (typeof pdfBytes === 'object' && pdfBytes !== null &&
-              !isNaN(pdfBytes.length)) {
+            } else if (typeof pdfBytes === 'object' && pdfBytes !== null && !isNaN(pdfBytes.length)) {
               params[key] = new Uint8Array(pdfBytes);
             } else if (isArrayBuffer(pdfBytes)) {
               params[key] = new Uint8Array(pdfBytes);
@@ -10420,22 +10488,20 @@ document.webL10n = (function(window, document, undefined) {
           this._progressiveReadListeners = [];
           this._readyCapability = createPromiseCapability();
         }
+
         PDFDataRangeTransport.prototype =
           /** @lends PDFDataRangeTransport.prototype */ {
-          addRangeListener:
-            function PDFDataRangeTransport_addRangeListener(listener) {
-              this._rangeListeners.push(listener);
-            },
+          addRangeListener: function PDFDataRangeTransport_addRangeListener(listener) {
+            this._rangeListeners.push(listener);
+          },
 
-          addProgressListener:
-            function PDFDataRangeTransport_addProgressListener(listener) {
-              this._progressListeners.push(listener);
-            },
+          addProgressListener: function PDFDataRangeTransport_addProgressListener(listener) {
+            this._progressListeners.push(listener);
+          },
 
-          addProgressiveReadListener:
-            function PDFDataRangeTransport_addProgressiveReadListener(listener) {
-              this._progressiveReadListeners.push(listener);
-            },
+          addProgressiveReadListener: function PDFDataRangeTransport_addProgressiveReadListener(listener) {
+            this._progressiveReadListeners.push(listener);
+          },
 
           onDataRange: function PDFDataRangeTransport_onDataRange(begin, chunk) {
             var listeners = this._rangeListeners;
@@ -10453,24 +10519,22 @@ document.webL10n = (function(window, document, undefined) {
             }.bind(this));
           },
 
-          onDataProgressiveRead:
-            function PDFDataRangeTransport_onDataProgress(chunk) {
-              this._readyCapability.promise.then(function () {
-                var listeners = this._progressiveReadListeners;
-                for (var i = 0, n = listeners.length; i < n; ++i) {
-                  listeners[i](chunk);
-                }
-              }.bind(this));
-            },
+          onDataProgressiveRead: function PDFDataRangeTransport_onDataProgress(chunk) {
+            this._readyCapability.promise.then(function () {
+              var listeners = this._progressiveReadListeners;
+              for (var i = 0, n = listeners.length; i < n; ++i) {
+                listeners[i](chunk);
+              }
+            }.bind(this));
+          },
 
           transportReady: function PDFDataRangeTransport_transportReady() {
             this._readyCapability.resolve();
           },
 
-          requestDataRange:
-            function PDFDataRangeTransport_requestDataRange(begin, end) {
-              throw new Error('Abstract method PDFDataRangeTransport.requestDataRange');
-            },
+          requestDataRange: function PDFDataRangeTransport_requestDataRange(begin, end) {
+            throw new Error('Abstract method PDFDataRangeTransport.requestDataRange');
+          },
 
           abort: function PDFDataRangeTransport_abort() {
           }
@@ -10492,6 +10556,7 @@ document.webL10n = (function(window, document, undefined) {
           this.transport = transport;
           this.loadingTask = loadingTask;
         }
+
         PDFDocumentProxy.prototype = /** @lends PDFDocumentProxy.prototype */ {
           /**
            * @return {number} Total number of pages the PDF contains.
@@ -10724,6 +10789,7 @@ document.webL10n = (function(window, document, undefined) {
           this.intentStates = {};
           this.destroyed = false;
         }
+
         PDFPageProxy.prototype = /** @lends PDFPageProxy.prototype */ {
           /**
            * @return {number} Page number of the page. First page is 1.
@@ -10935,11 +11001,11 @@ document.webL10n = (function(window, document, undefined) {
             this.transport.pageCache[this.pageIndex] = null;
 
             var waitOn = [];
-            Object.keys(this.intentStates).forEach(function(intent) {
+            Object.keys(this.intentStates).forEach(function (intent) {
               var intentState = this.intentStates[intent];
-              intentState.renderTasks.forEach(function(renderTask) {
-                var renderCompleted = renderTask.capability.promise.
-                catch(function () {}); // ignoring failures
+              intentState.renderTasks.forEach(function (renderTask) {
+                var renderCompleted = renderTask.capability.promise.catch(function () {
+                }); // ignoring failures
                 waitOn.push(renderCompleted);
                 renderTask.cancel();
               });
@@ -10953,7 +11019,7 @@ document.webL10n = (function(window, document, undefined) {
           /**
            * Cleans up resources allocated by the page. (deprecated)
            */
-          destroy: function() {
+          destroy: function () {
             deprecated('page destroy method, use cleanup() instead');
             this.cleanup();
           },
@@ -10972,7 +11038,7 @@ document.webL10n = (function(window, document, undefined) {
            */
           _tryCleanup: function PDFPageProxy_tryCleanup() {
             if (!this.pendingCleanup ||
-              Object.keys(this.intentStates).some(function(intent) {
+              Object.keys(this.intentStates).some(function (intent) {
                 var intentState = this.intentStates[intent];
                 return (intentState.renderTasks.length !== 0 ||
                 intentState.receivingOperatorList);
@@ -10980,7 +11046,7 @@ document.webL10n = (function(window, document, undefined) {
               return;
             }
 
-            Object.keys(this.intentStates).forEach(function(intent) {
+            Object.keys(this.intentStates).forEach(function (intent) {
               delete this.intentStates[intent];
             }, this);
             this.objs.clear();
@@ -11077,7 +11143,7 @@ document.webL10n = (function(window, document, undefined) {
           this._initialize();
         }
 
-        PDFWorker.prototype =  /** @lends PDFWorker.prototype */ {
+        PDFWorker.prototype = /** @lends PDFWorker.prototype */ {
           get promise() {
             return this._readyCapability.promise;
           },
@@ -11143,7 +11209,7 @@ document.webL10n = (function(window, document, undefined) {
                   }
                   try {
                     sendTest();
-                  } catch (e)  {
+                  } catch (e) {
                     // We need fallback to a faked worker.
                     this._setupFakeWorker();
                   }
@@ -11206,7 +11272,8 @@ document.webL10n = (function(window, document, undefined) {
                   var i = this._listeners.indexOf(listener);
                   this._listeners.splice(i, 1);
                 },
-                terminate: function () {}
+                terminate: function () {
+                }
               };
               this._port = port;
 
@@ -11267,6 +11334,7 @@ document.webL10n = (function(window, document, undefined) {
 
           this.setupMessageHandler();
         }
+
         WorkerTransport.prototype = {
           destroy: function WorkerTransport_destroy() {
             if (this.destroyCapability) {
@@ -11305,285 +11373,284 @@ document.webL10n = (function(window, document, undefined) {
             return this.destroyCapability.promise;
           },
 
-          setupMessageHandler:
-            function WorkerTransport_setupMessageHandler() {
-              var messageHandler = this.messageHandler;
+          setupMessageHandler: function WorkerTransport_setupMessageHandler() {
+            var messageHandler = this.messageHandler;
 
-              function updatePassword(password) {
-                messageHandler.send('UpdatePassword', password);
+            function updatePassword(password) {
+              messageHandler.send('UpdatePassword', password);
+            }
+
+            var pdfDataRangeTransport = this.pdfDataRangeTransport;
+            if (pdfDataRangeTransport) {
+              pdfDataRangeTransport.addRangeListener(function (begin, chunk) {
+                messageHandler.send('OnDataRange', {
+                  begin: begin,
+                  chunk: chunk
+                });
+              });
+
+              pdfDataRangeTransport.addProgressListener(function (loaded) {
+                messageHandler.send('OnDataProgress', {
+                  loaded: loaded
+                });
+              });
+
+              pdfDataRangeTransport.addProgressiveReadListener(function (chunk) {
+                messageHandler.send('OnDataRange', {
+                  chunk: chunk
+                });
+              });
+
+              messageHandler.on('RequestDataRange',
+                function transportDataRange(data) {
+                  pdfDataRangeTransport.requestDataRange(data.begin, data.end);
+                }, this);
+            }
+
+            messageHandler.on('GetDoc', function transportDoc(data) {
+              var pdfInfo = data.pdfInfo;
+              this.numPages = data.pdfInfo.numPages;
+              var loadingTask = this.loadingTask;
+              var pdfDocument = new PDFDocumentProxy(pdfInfo, this, loadingTask);
+              this.pdfDocument = pdfDocument;
+              loadingTask._capability.resolve(pdfDocument);
+            }, this);
+
+            messageHandler.on('NeedPassword',
+              function transportNeedPassword(exception) {
+                var loadingTask = this.loadingTask;
+                if (loadingTask.onPassword) {
+                  return loadingTask.onPassword(updatePassword,
+                    PasswordResponses.NEED_PASSWORD);
+                }
+                loadingTask._capability.reject(
+                  new PasswordException(exception.message, exception.code));
+              }, this);
+
+            messageHandler.on('IncorrectPassword',
+              function transportIncorrectPassword(exception) {
+                var loadingTask = this.loadingTask;
+                if (loadingTask.onPassword) {
+                  return loadingTask.onPassword(updatePassword,
+                    PasswordResponses.INCORRECT_PASSWORD);
+                }
+                loadingTask._capability.reject(
+                  new PasswordException(exception.message, exception.code));
+              }, this);
+
+            messageHandler.on('InvalidPDF', function transportInvalidPDF(exception) {
+              this.loadingTask._capability.reject(
+                new InvalidPDFException(exception.message));
+            }, this);
+
+            messageHandler.on('MissingPDF', function transportMissingPDF(exception) {
+              this.loadingTask._capability.reject(
+                new MissingPDFException(exception.message));
+            }, this);
+
+            messageHandler.on('UnexpectedResponse',
+              function transportUnexpectedResponse(exception) {
+                this.loadingTask._capability.reject(
+                  new UnexpectedResponseException(exception.message, exception.status));
+              }, this);
+
+            messageHandler.on('UnknownError',
+              function transportUnknownError(exception) {
+                this.loadingTask._capability.reject(
+                  new UnknownErrorException(exception.message, exception.details));
+              }, this);
+
+            messageHandler.on('DataLoaded', function transportPage(data) {
+              this.downloadInfoCapability.resolve(data);
+            }, this);
+
+            messageHandler.on('PDFManagerReady', function transportPage(data) {
+              if (this.pdfDataRangeTransport) {
+                this.pdfDataRangeTransport.transportReady();
+              }
+            }, this);
+
+            messageHandler.on('StartRenderPage', function transportRender(data) {
+              if (this.destroyed) {
+                return; // Ignore any pending requests if the worker was terminated.
+              }
+              var page = this.pageCache[data.pageIndex];
+
+              page.stats.timeEnd('Page Request');
+              page._startRenderPage(data.transparency, data.intent);
+            }, this);
+
+            messageHandler.on('RenderPageChunk', function transportRender(data) {
+              if (this.destroyed) {
+                return; // Ignore any pending requests if the worker was terminated.
+              }
+              var page = this.pageCache[data.pageIndex];
+
+              page._renderPageChunk(data.operatorList, data.intent);
+            }, this);
+
+            messageHandler.on('commonobj', function transportObj(data) {
+              if (this.destroyed) {
+                return; // Ignore any pending requests if the worker was terminated.
               }
 
-              var pdfDataRangeTransport = this.pdfDataRangeTransport;
-              if (pdfDataRangeTransport) {
-                pdfDataRangeTransport.addRangeListener(function(begin, chunk) {
-                  messageHandler.send('OnDataRange', {
-                    begin: begin,
-                    chunk: chunk
-                  });
-                });
-
-                pdfDataRangeTransport.addProgressListener(function(loaded) {
-                  messageHandler.send('OnDataProgress', {
-                    loaded: loaded
-                  });
-                });
-
-                pdfDataRangeTransport.addProgressiveReadListener(function(chunk) {
-                  messageHandler.send('OnDataRange', {
-                    chunk: chunk
-                  });
-                });
-
-                messageHandler.on('RequestDataRange',
-                  function transportDataRange(data) {
-                    pdfDataRangeTransport.requestDataRange(data.begin, data.end);
-                  }, this);
+              var id = data[0];
+              var type = data[1];
+              if (this.commonObjs.hasData(id)) {
+                return;
               }
 
-              messageHandler.on('GetDoc', function transportDoc(data) {
-                var pdfInfo = data.pdfInfo;
-                this.numPages = data.pdfInfo.numPages;
-                var loadingTask = this.loadingTask;
-                var pdfDocument = new PDFDocumentProxy(pdfInfo, this, loadingTask);
-                this.pdfDocument = pdfDocument;
-                loadingTask._capability.resolve(pdfDocument);
-              }, this);
+              switch (type) {
+                case 'Font':
+                  var exportedData = data[2];
 
-              messageHandler.on('NeedPassword',
-                function transportNeedPassword(exception) {
-                  var loadingTask = this.loadingTask;
-                  if (loadingTask.onPassword) {
-                    return loadingTask.onPassword(updatePassword,
-                      PasswordResponses.NEED_PASSWORD);
-                  }
-                  loadingTask._capability.reject(
-                    new PasswordException(exception.message, exception.code));
-                }, this);
-
-              messageHandler.on('IncorrectPassword',
-                function transportIncorrectPassword(exception) {
-                  var loadingTask = this.loadingTask;
-                  if (loadingTask.onPassword) {
-                    return loadingTask.onPassword(updatePassword,
-                      PasswordResponses.INCORRECT_PASSWORD);
-                  }
-                  loadingTask._capability.reject(
-                    new PasswordException(exception.message, exception.code));
-                }, this);
-
-              messageHandler.on('InvalidPDF', function transportInvalidPDF(exception) {
-                this.loadingTask._capability.reject(
-                  new InvalidPDFException(exception.message));
-              }, this);
-
-              messageHandler.on('MissingPDF', function transportMissingPDF(exception) {
-                this.loadingTask._capability.reject(
-                  new MissingPDFException(exception.message));
-              }, this);
-
-              messageHandler.on('UnexpectedResponse',
-                function transportUnexpectedResponse(exception) {
-                  this.loadingTask._capability.reject(
-                    new UnexpectedResponseException(exception.message, exception.status));
-                }, this);
-
-              messageHandler.on('UnknownError',
-                function transportUnknownError(exception) {
-                  this.loadingTask._capability.reject(
-                    new UnknownErrorException(exception.message, exception.details));
-                }, this);
-
-              messageHandler.on('DataLoaded', function transportPage(data) {
-                this.downloadInfoCapability.resolve(data);
-              }, this);
-
-              messageHandler.on('PDFManagerReady', function transportPage(data) {
-                if (this.pdfDataRangeTransport) {
-                  this.pdfDataRangeTransport.transportReady();
-                }
-              }, this);
-
-              messageHandler.on('StartRenderPage', function transportRender(data) {
-                if (this.destroyed) {
-                  return; // Ignore any pending requests if the worker was terminated.
-                }
-                var page = this.pageCache[data.pageIndex];
-
-                page.stats.timeEnd('Page Request');
-                page._startRenderPage(data.transparency, data.intent);
-              }, this);
-
-              messageHandler.on('RenderPageChunk', function transportRender(data) {
-                if (this.destroyed) {
-                  return; // Ignore any pending requests if the worker was terminated.
-                }
-                var page = this.pageCache[data.pageIndex];
-
-                page._renderPageChunk(data.operatorList, data.intent);
-              }, this);
-
-              messageHandler.on('commonobj', function transportObj(data) {
-                if (this.destroyed) {
-                  return; // Ignore any pending requests if the worker was terminated.
-                }
-
-                var id = data[0];
-                var type = data[1];
-                if (this.commonObjs.hasData(id)) {
-                  return;
-                }
-
-                switch (type) {
-                  case 'Font':
-                    var exportedData = data[2];
-
-                    var font;
-                    if ('error' in exportedData) {
-                      var error = exportedData.error;
-                      warn('Error during font loading: ' + error);
-                      this.commonObjs.resolve(id, error);
-                      break;
-                    } else {
-                      font = new FontFaceObject(exportedData);
-                    }
-
-                    this.fontLoader.bind(
-                      [font],
-                      function fontReady(fontObjs) {
-                        this.commonObjs.resolve(id, font);
-                      }.bind(this)
-                    );
+                  var font;
+                  if ('error' in exportedData) {
+                    var error = exportedData.error;
+                    warn('Error during font loading: ' + error);
+                    this.commonObjs.resolve(id, error);
                     break;
-                  case 'FontPath':
-                    this.commonObjs.resolve(id, data[2]);
-                    break;
-                  default:
-                    error('Got unknown common object type ' + type);
-                }
-              }, this);
-
-              messageHandler.on('obj', function transportObj(data) {
-                if (this.destroyed) {
-                  return; // Ignore any pending requests if the worker was terminated.
-                }
-
-                var id = data[0];
-                var pageIndex = data[1];
-                var type = data[2];
-                var pageProxy = this.pageCache[pageIndex];
-                var imageData;
-                if (pageProxy.objs.hasData(id)) {
-                  return;
-                }
-
-                switch (type) {
-                  case 'JpegStream':
-                    imageData = data[3];
-                    loadJpegStream(id, imageData, pageProxy.objs);
-                    break;
-                  case 'Image':
-                    imageData = data[3];
-                    pageProxy.objs.resolve(id, imageData);
-
-                    // heuristics that will allow not to store large data
-                    var MAX_IMAGE_SIZE_TO_STORE = 8000000;
-                    if (imageData && 'data' in imageData &&
-                      imageData.data.length > MAX_IMAGE_SIZE_TO_STORE) {
-                      pageProxy.cleanupAfterRender = true;
-                    }
-                    break;
-                  default:
-                    error('Got unknown object type ' + type);
-                }
-              }, this);
-
-              messageHandler.on('DocProgress', function transportDocProgress(data) {
-                if (this.destroyed) {
-                  return; // Ignore any pending requests if the worker was terminated.
-                }
-
-                var loadingTask = this.loadingTask;
-                if (loadingTask.onProgress) {
-                  loadingTask.onProgress({
-                    loaded: data.loaded,
-                    total: data.total
-                  });
-                }
-              }, this);
-
-              messageHandler.on('PageError', function transportError(data) {
-                if (this.destroyed) {
-                  return; // Ignore any pending requests if the worker was terminated.
-                }
-
-                var page = this.pageCache[data.pageNum - 1];
-                var intentState = page.intentStates[data.intent];
-                if (intentState.displayReadyCapability) {
-                  intentState.displayReadyCapability.reject(data.error);
-                } else {
-                  error(data.error);
-                }
-              }, this);
-
-              messageHandler.on('UnsupportedFeature',
-                function transportUnsupportedFeature(data) {
-                  if (this.destroyed) {
-                    return; // Ignore any pending requests if the worker was terminated.
+                  } else {
+                    font = new FontFaceObject(exportedData);
                   }
-                  var featureId = data.featureId;
-                  var loadingTask = this.loadingTask;
-                  if (loadingTask.onUnsupportedFeature) {
-                    loadingTask.onUnsupportedFeature(featureId);
+
+                  this.fontLoader.bind(
+                    [font],
+                    function fontReady(fontObjs) {
+                      this.commonObjs.resolve(id, font);
+                    }.bind(this)
+                  );
+                  break;
+                case 'FontPath':
+                  this.commonObjs.resolve(id, data[2]);
+                  break;
+                default:
+                  error('Got unknown common object type ' + type);
+              }
+            }, this);
+
+            messageHandler.on('obj', function transportObj(data) {
+              if (this.destroyed) {
+                return; // Ignore any pending requests if the worker was terminated.
+              }
+
+              var id = data[0];
+              var pageIndex = data[1];
+              var type = data[2];
+              var pageProxy = this.pageCache[pageIndex];
+              var imageData;
+              if (pageProxy.objs.hasData(id)) {
+                return;
+              }
+
+              switch (type) {
+                case 'JpegStream':
+                  imageData = data[3];
+                  loadJpegStream(id, imageData, pageProxy.objs);
+                  break;
+                case 'Image':
+                  imageData = data[3];
+                  pageProxy.objs.resolve(id, imageData);
+
+                  // heuristics that will allow not to store large data
+                  var MAX_IMAGE_SIZE_TO_STORE = 8000000;
+                  if (imageData && 'data' in imageData &&
+                    imageData.data.length > MAX_IMAGE_SIZE_TO_STORE) {
+                    pageProxy.cleanupAfterRender = true;
                   }
-                  PDFJS.UnsupportedManager.notify(featureId);
-                }, this);
+                  break;
+                default:
+                  error('Got unknown object type ' + type);
+              }
+            }, this);
 
-              messageHandler.on('JpegDecode', function(data) {
-                if (this.destroyed) {
-                  return Promise.reject('Worker was terminated');
-                }
+            messageHandler.on('DocProgress', function transportDocProgress(data) {
+              if (this.destroyed) {
+                return; // Ignore any pending requests if the worker was terminated.
+              }
 
-                var imageUrl = data[0];
-                var components = data[1];
-                if (components !== 3 && components !== 1) {
-                  return Promise.reject(
-                    new Error('Only 3 components or 1 component can be returned'));
-                }
-
-                return new Promise(function (resolve, reject) {
-                  var img = new Image();
-                  img.onload = function () {
-                    var width = img.width;
-                    var height = img.height;
-                    var size = width * height;
-                    var rgbaLength = size * 4;
-                    var buf = new Uint8Array(size * components);
-                    var tmpCanvas = createScratchCanvas(width, height);
-                    var tmpCtx = tmpCanvas.getContext('2d');
-                    tmpCtx.drawImage(img, 0, 0);
-                    var data = tmpCtx.getImageData(0, 0, width, height).data;
-                    var i, j;
-
-                    if (components === 3) {
-                      for (i = 0, j = 0; i < rgbaLength; i += 4, j += 3) {
-                        buf[j] = data[i];
-                        buf[j + 1] = data[i + 1];
-                        buf[j + 2] = data[i + 2];
-                      }
-                    } else if (components === 1) {
-                      for (i = 0, j = 0; i < rgbaLength; i += 4, j++) {
-                        buf[j] = data[i];
-                      }
-                    }
-                    resolve({ data: buf, width: width, height: height});
-                  };
-                  img.onerror = function () {
-                    reject(new Error('JpegDecode failed to load image'));
-                  };
-                  img.src = imageUrl;
+              var loadingTask = this.loadingTask;
+              if (loadingTask.onProgress) {
+                loadingTask.onProgress({
+                  loaded: data.loaded,
+                  total: data.total
                 });
+              }
+            }, this);
+
+            messageHandler.on('PageError', function transportError(data) {
+              if (this.destroyed) {
+                return; // Ignore any pending requests if the worker was terminated.
+              }
+
+              var page = this.pageCache[data.pageNum - 1];
+              var intentState = page.intentStates[data.intent];
+              if (intentState.displayReadyCapability) {
+                intentState.displayReadyCapability.reject(data.error);
+              } else {
+                error(data.error);
+              }
+            }, this);
+
+            messageHandler.on('UnsupportedFeature',
+              function transportUnsupportedFeature(data) {
+                if (this.destroyed) {
+                  return; // Ignore any pending requests if the worker was terminated.
+                }
+                var featureId = data.featureId;
+                var loadingTask = this.loadingTask;
+                if (loadingTask.onUnsupportedFeature) {
+                  loadingTask.onUnsupportedFeature(featureId);
+                }
+                PDFJS.UnsupportedManager.notify(featureId);
               }, this);
-            },
+
+            messageHandler.on('JpegDecode', function (data) {
+              if (this.destroyed) {
+                return Promise.reject('Worker was terminated');
+              }
+
+              var imageUrl = data[0];
+              var components = data[1];
+              if (components !== 3 && components !== 1) {
+                return Promise.reject(
+                  new Error('Only 3 components or 1 component can be returned'));
+              }
+
+              return new Promise(function (resolve, reject) {
+                var img = new Image();
+                img.onload = function () {
+                  var width = img.width;
+                  var height = img.height;
+                  var size = width * height;
+                  var rgbaLength = size * 4;
+                  var buf = new Uint8Array(size * components);
+                  var tmpCanvas = createScratchCanvas(width, height);
+                  var tmpCtx = tmpCanvas.getContext('2d');
+                  tmpCtx.drawImage(img, 0, 0);
+                  var data = tmpCtx.getImageData(0, 0, width, height).data;
+                  var i, j;
+
+                  if (components === 3) {
+                    for (i = 0, j = 0; i < rgbaLength; i += 4, j += 3) {
+                      buf[j] = data[i];
+                      buf[j + 1] = data[i + 1];
+                      buf[j + 2] = data[i + 2];
+                    }
+                  } else if (components === 1) {
+                    for (i = 0, j = 0; i < rgbaLength; i += 4, j++) {
+                      buf[j] = data[i];
+                    }
+                  }
+                  resolve({data: buf, width: width, height: height});
+                };
+                img.onerror = function () {
+                  reject(new Error('JpegDecode failed to load image'));
+                };
+                img.src = imageUrl;
+              });
+            }, this);
+          },
 
           getData: function WorkerTransport_getData() {
             return this.messageHandler.sendWithPromise('GetData', null);
@@ -11591,7 +11658,7 @@ document.webL10n = (function(window, document, undefined) {
 
           getPage: function WorkerTransport_getPage(pageNumber, capability) {
             if (pageNumber <= 0 || pageNumber > this.numPages ||
-              (pageNumber|0) !== pageNumber) {
+              (pageNumber | 0) !== pageNumber) {
               return Promise.reject(new Error('Invalid page request'));
             }
 
@@ -11614,7 +11681,7 @@ document.webL10n = (function(window, document, undefined) {
           },
 
           getPageIndex: function WorkerTransport_getPageIndexByRef(ref) {
-            return this.messageHandler.sendWithPromise('GetPageIndex', { ref: ref });
+            return this.messageHandler.sendWithPromise('GetPageIndex', {ref: ref});
           },
 
           getAnnotations: function WorkerTransport_getAnnotations(pageIndex, intent) {
@@ -11629,7 +11696,7 @@ document.webL10n = (function(window, document, undefined) {
           },
 
           getDestination: function WorkerTransport_getDestination(id) {
-            return this.messageHandler.sendWithPromise('GetDestination', { id: id });
+            return this.messageHandler.sendWithPromise('GetDestination', {id: id});
           },
 
           getPageLabels: function WorkerTransport_getPageLabels() {
@@ -11649,8 +11716,7 @@ document.webL10n = (function(window, document, undefined) {
           },
 
           getMetadata: function WorkerTransport_getMetadata() {
-            return this.messageHandler.sendWithPromise('GetMetadata', null).
-            then(function transportMetadata(results) {
+            return this.messageHandler.sendWithPromise('GetMetadata', null).then(function transportMetadata(results) {
               return {
                 info: results[0],
                 metadata: (results[1] ? new Metadata(results[1]) : null)
@@ -11663,8 +11729,7 @@ document.webL10n = (function(window, document, undefined) {
           },
 
           startCleanup: function WorkerTransport_startCleanup() {
-            this.messageHandler.sendWithPromise('Cleanup', null).
-            then(function endCleanup() {
+            this.messageHandler.sendWithPromise('Cleanup', null).then(function endCleanup() {
               for (var i = 0, ii = this.pageCache.length; i < ii; i++) {
                 var page = this.pageCache[i];
                 if (page) {
@@ -11868,30 +11933,29 @@ document.webL10n = (function(window, document, undefined) {
 
         InternalRenderTask.prototype = {
 
-          initalizeGraphics:
-            function InternalRenderTask_initalizeGraphics(transparency) {
+          initalizeGraphics: function InternalRenderTask_initalizeGraphics(transparency) {
 
-              if (this.cancelled) {
-                return;
-              }
-              if (PDFJS.pdfBug && 'StepperManager' in globalScope &&
-                globalScope.StepperManager.enabled) {
-                this.stepper = globalScope.StepperManager.create(this.pageNumber - 1);
-                this.stepper.init(this.operatorList);
-                this.stepper.nextBreakPoint = this.stepper.getNextBreakPoint();
-              }
+            if (this.cancelled) {
+              return;
+            }
+            if (PDFJS.pdfBug && 'StepperManager' in globalScope &&
+              globalScope.StepperManager.enabled) {
+              this.stepper = globalScope.StepperManager.create(this.pageNumber - 1);
+              this.stepper.init(this.operatorList);
+              this.stepper.nextBreakPoint = this.stepper.getNextBreakPoint();
+            }
 
-              var params = this.params;
-              this.gfx = new CanvasGraphics(params.canvasContext, this.commonObjs,
-                this.objs, params.imageLayer);
+            var params = this.params;
+            this.gfx = new CanvasGraphics(params.canvasContext, this.commonObjs,
+              this.objs, params.imageLayer);
 
-              this.gfx.beginDrawing(params.transform, params.viewport, transparency);
-              this.operatorListIdx = 0;
-              this.graphicsReady = true;
-              if (this.graphicsReadyCallback) {
-                this.graphicsReadyCallback();
-              }
-            },
+            this.gfx.beginDrawing(params.transform, params.viewport, transparency);
+            this.operatorListIdx = 0;
+            this.graphicsReady = true;
+            if (this.graphicsReadyCallback) {
+              this.graphicsReadyCallback();
+            }
+          },
 
           cancel: function InternalRenderTask_cancel() {
             this.running = false;
@@ -20566,7 +20630,7 @@ var pdfjsWebLibs = {
     };
 
     var HOSTED_VIEWER_ORIGINS = ['null',
-      'http://localhost', 'http://demo.cnbexpress.com','http://www.cnbexpress.com','http://10.0.2.2'];
+      'http://localhost', 'http://demo.cnbexpress.com', 'http://www.cnbexpress.com', 'http://10.0.2.2'];
 
     function validateFileURL(file) {
       try {

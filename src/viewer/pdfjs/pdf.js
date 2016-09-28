@@ -564,7 +564,7 @@
       window.requestAnimationFrame = fakeRequestAnimationFrame;
       return;
     }
-    if ('requestAnimationFrame' in window) {
+    if ('requestAnimationFrame' in window && typeof window.requestAnimationFrame !== 'undefined') {
       return;
     }
     window.requestAnimationFrame =
@@ -9975,16 +9975,7 @@ document.webL10n = (function (window, document, undefined) {
       if (typeof requirejs !== 'undefined' && requirejs.toUrl) {
         PDFJS.workerSrc = requirejs.toUrl('pdfjs-dist/build/pdf.worker.js');
       }
-      var fakeWorkerFilesLoader = useRequireEnsure ? (function (callback) {
-        require.ensure([], function () {
-          require('./pdf.worker.js');
-          callback();
-        });
-      }) : (typeof requirejs !== 'undefined') ? (function (callback) {
-        requirejs(['pdfjs-dist/build/pdf.worker'], function (worker) {
-          callback();
-        });
-      }) : null;
+      var fakeWorkerFilesLoader = null;
 
 
       /**
@@ -20629,36 +20620,6 @@ var pdfjsWebLibs = {
       }
     };
 
-    var HOSTED_VIEWER_ORIGINS = ['null',
-      'http://localhost', 'http://demo.cnbexpress.com', 'http://www.cnbexpress.com', 'http://10.0.2.2'];
-
-    function validateFileURL(file) {
-      try {
-        var viewerOrigin = new URL(window.location.href).origin || 'null';
-        if (HOSTED_VIEWER_ORIGINS.indexOf(viewerOrigin) >= 0) {
-          // Hosted or local viewer, allow for any file locations
-          return;
-        }
-        var fileOrigin = new URL(file, window.location.href).origin;
-        // Removing of the following line will not guarantee that the viewer will
-        // start accepting URLs from foreign origin -- CORS headers on the remote
-        // server must be properly configured.
-        if (fileOrigin !== viewerOrigin) {
-          throw new Error('file origin does not match viewer\'s');
-        }
-      } catch (e) {
-        var message = e && e.message;
-        var loadingErrorMessage = mozL10n.get('loading_error', null,
-          'An error occurred while loading the PDF.');
-
-        var moreInfo = {
-          message: message
-        };
-        PDFViewerApplication.error(loadingErrorMessage, moreInfo);
-        throw e;
-      }
-    }
-
     function loadAndEnablePDFBug(enabledTabs) {
       return new Promise(function (resolve, reject) {
         var appConfig = PDFViewerApplication.appConfig;
@@ -20680,7 +20641,6 @@ var pdfjsWebLibs = {
       var queryString = document.location.search.substring(1);
       var params = parseQueryString(queryString);
       var file = 'file' in params ? params.file : DEFAULT_URL;
-      validateFileURL(file);
 
       var waitForBeforeOpening = [];
       var appConfig = PDFViewerApplication.appConfig;

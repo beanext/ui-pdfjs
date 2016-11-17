@@ -20639,7 +20639,7 @@ var pdfjsWebLibs = {
 
       var waitForBeforeOpening = [];
       var appConfig = PDFViewerApplication.appConfig;
-      var fileInput = document.createElement('input');
+      /*var fileInput = document.createElement('input');
       fileInput.id = appConfig.openFileInputName;
       fileInput.className = 'fileInput';
       fileInput.setAttribute('type', 'file');
@@ -20651,7 +20651,7 @@ var pdfjsWebLibs = {
         appConfig.secondaryToolbar.openFileButton.setAttribute('hidden', 'true');
       } else {
         fileInput.value = null;
-      }
+      }*/
 
 
       var PDFJS = pdfjsLib.PDFJS;
